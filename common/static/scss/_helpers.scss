@@ -1,0 +1,64 @@
+@function _length($number, $unit) {
+  $strings: 'px' 'cm' 'mm' '%' 'ch' 'pica' 'in' 'em' 'rem' 'pt' 'pc' 'ex' 'vw' 'vh' 'vmin' 'vmax';
+  $units: 1px 1cm 1mm 1% 1ch 1pica 1in 1em 1rem 1pt 1pc 1ex 1vw 1vh 1vmin 1vmax;
+  $index: index($strings, $unit);
+
+  @if not $index {
+//    @warn "Unknown unit `#{$unit}`.";
+//    @return false;
+    @return "Unknown unit `#{$unit}`."
+  }
+
+  @return $number * nth($units, $index);
+}
+
+
+@function stringToNumber($string) {
+  $strings: '0' '1' '2' '3' '4' '5' '6' '7' '8' '9';
+  $numbers: 0 1 2 3 4 5 6 7 8 9;
+
+  $result: 0;
+  $minus: false;
+  $divider: 0;
+
+  // Создадим счетчик индекса обхода строки,
+  @for $i from 1 through str-length($string) {
+    // и будем доставать каждый символ из строки в соответствии с индексом.
+    $character: str-slice($string, $i, $i);
+    // Если взятый символ минус,
+    @if $character == '-' {
+      // то установим флаг минуса.
+      $minus: true;
+    } @else if $character == '.' {
+      $divider: 1;
+    } @else {
+      // Иначе найдем позицию этого символа в массиве символов.
+      $index: index($strings, $character);
+      // Если такой символ в массиве символов не найден,
+      @if not $index {
+        // то проверим значение на окончание (px, em и т.д.)
+        $result: if($minus, $result * -1, $result);
+        @return _length($result, str-slice($string, $i));
+      }
+      // Иначе возьмем из массива цифр цифру, соответствующую найденной позиции символа в массиве символов.
+      $number: nth($numbers, $index);
+
+      // Далее, если это целое число (точки не было),
+      @if $divider == 0 {
+        // то для последовательного увеличения разряда числа, умножим предыдущий результат на 10
+        $result: $result * 10;
+      }
+      // Если же это дробное число,
+      @else {
+        // то умножим делитель на десять,
+        $divider: $divider * 10;
+        // и разделим число на делитель (сдвинем точку в лево).
+        $number: $number / $divider;
+      }
+      // Далее приплюсуем полученное значение к результату
+      $result: $result + $number;
+    }
+  }
+  // Если установлен флаг минуса, то умножим значение на -1.
+  @return if($minus, $result * -1, $result);
+}

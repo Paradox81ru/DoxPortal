@@ -1,0 +1,123 @@
+@import "../../scss/_mixins";
+
+form {
+  ul.errorList.nonField li {
+    color: #a94442;
+  }
+}
+
+div.form-group {
+  label {
+    &.form-label {
+      font-weight: bold;
+    }
+
+    &.control-label {
+      /*    display: block;
+          width: 140px; */
+    }
+  }
+
+  &.fld-inline {
+    display: flex;
+    align-items: start;
+
+    label {
+      margin-right: 10px;
+      width: 20%;
+    }
+
+    &.required {
+
+      &:before {
+        margin-right: 3px;
+      }
+    }
+  }
+
+  //overflow: hidden;
+  padding: 4px;
+
+  &.required {
+
+    &:before {
+      content: '* ';
+      color: red;
+    }
+  }
+
+  &.field-help-sign-question {
+    input.form-control {
+      width: 90%;
+    }
+  }
+
+  .input-img-block {
+    display: flex;
+/*    float: right;  */
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  input.form-control, div.input-group {
+    flex-basis: calc(100% - 50px);
+/*    width: 90%;
+*/
+      //&[type="checkbox"] {
+      //  height: calc(1.25rem + 2px);
+        //height: auto;
+        //display: inline-block;
+        //width: auto;
+        //vertical-align: middle;
+        //margin-left: 10px;
+    //}
+  }
+
+  input.form-check-input {
+    //margin-left: 10px;
+  }
+
+  img.help-sign-question {
+    align-self: center;
+  }
+
+  ul.invalid-feedback {
+    order: 1;
+  }
+}
+
+.hide-help-text {
+  display: none;
+}
+
+.tooltip.ui-help-text .tooltip-inner{
+  background-color: white;
+  @include doxShadow(gray, 8px, 2px, 2px);
+
+  span {
+    padding: 0;
+    margin-top: 1px;
+    font-size: 0.9em;
+    color: darkgreen;
+    text-align: justify;
+  }
+  ul {
+    padding: 0;
+    margin-top: 1px;
+    font-size: 0.9em;
+    color: darkgreen;
+
+    li {
+      margin-left: 10px;
+      text-indent: -8px;
+      list-style-type: none;
+      text-align: justify;
+
+      &:before {
+        content: "- ";
+      }
+    }
+  }
+}
+

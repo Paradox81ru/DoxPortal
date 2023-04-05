@@ -1,0 +1,172 @@
+@import "../../scss/_main";
+@import "../../scss/_mixins";
+
+.btn.btn-orange-gradient {
+  @include buttonGradientFourHue($color-secondary);
+}
+
+.nav-header {
+
+  i {
+//    font-size: 2em;
+  }
+
+  .header-menu {
+    //float: left;
+    display: flex;
+    padding: 0;
+    list-style: none;
+
+    li {
+      //float: left;
+      a {
+        color: $color-secondary;
+        text-align: center;
+        display: inline-block;
+        text-decoration: none;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  .field-search {
+    justify-content: end;
+
+    .btn-outline-secondary {
+      color: #444c53;
+
+      &:hover {
+        color: #fff;
+      }
+
+      &:focus, &:active:focus {
+        box-shadow: none;
+      }
+    }
+    .btn-extended-search {
+      padding: 1px 6px;
+    }
+    input {
+      border-color: $color-secondary;
+      height: auto;
+      margin: 1px 0;
+
+      &:focus {
+        box-shadow: none;
+        z-index: 1;
+      }
+    }
+
+    .btn-search {
+      font-size: 0.7em;
+    }
+  }
+}
+
+/* Полный экран, не менее 1200 пикселей в ширину. */
+@media (min-width: 1200px) {
+  .nav-header {
+    .header-menu {
+      margin: 0 0 0 0; // Отступ от поля поиска
+      li {
+        margin-right: 40px; // Ширина пробела между иконками
+      }
+
+    }
+
+    .field-search {
+      width: 250px;
+    }
+  }
+}
+
+/* Не более 1200 пикселей в ширину. */
+@media (max-width: 1200px) {
+  .nav-header {
+    .header-menu {
+      margin: 0 5px 0 0; // При уменьшении формы иконки должны стать ближе к полю поиска
+      li {
+        margin-right: 10px; // Ширина пробела между иконками
+      }
+    }
+
+    .field-search {
+      width: 230px;
+    }
+  }
+}
+
+@media (max-width: 992px) {
+  .nav-header {
+    .header-menu {
+      margin: 22px 0 0 0;
+
+      li {
+        margin-right: 5px; // Ширина пробела между иконками
+      }
+    }
+  }
+
+  .under-header .breadcrumb {
+    display: none;
+  }
+
+  #main-content {
+    /*      margin-left: 9%;  */ // Общее содержимое немного смещаем влево
+  }
+
+  span.label-button-menu{
+    overflow: hidden;
+
+    i.label-icon + span.label-text {
+      display: none;    // при уменьшении формы уберем текст у кнопок, у которых есть иконка,
+    }
+
+    & > span.label-text {
+      display: block; // и сократим текст до двух букв у кнопок, у которых иконки нет.
+      width: 16px;
+    }
+  }
+}
+
+/* @MEDIA */
+
+@media (min-width: 992px) {
+
+}
+
+@media (max-width: 768px) {
+  .hidden-icon-search {
+    display: block;
+  }
+  .nav-header .field-search {
+    display: none;
+  }
+
+}
+
+@media (min-width: 768px) {
+  .hidden-icon-search {
+    display: none;
+  }
+
+}
+
+@media (max-width: 576px) {
+  .nav-header {
+    position: relative;
+  }
+
+  #main-content {
+    width: 100%;
+    margin-left: 0;
+    padding-left: 0 !important;
+  }
+}
+
+.input-group-btn > button.btn.btn-angle-double-left,
+.input-group-btn > button.btn.btn-search {
+  padding: 0 10px;
+}

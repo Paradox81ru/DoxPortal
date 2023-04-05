@@ -1,0 +1,118 @@
+- model: main.paradox
+  pk: 1
+  fields: {header: "Парадокс стакана",
+    content: "Стакан одновременно
+      и на половину пустой
+      и на половину полный.",
+    is_choices: true, is_enabled: true}
+- model: main.paradox
+  pk: 2
+  fields: {header: "Парадокс Смита",
+    content: "Хотя вода как
+      ресурс гораздо
+      полезнее кусков
+      кристаллического
+      углерода, называемых
+      нами алмазами, цена
+      последних на международном
+      рынке несоизмеримо
+      выше стоимости
+      воды.", is_choices: true, is_enabled: true}
+- model: main.paradox
+  pk: 3
+  fields: {header: "Парадокс Пиннокио",
+    content: "Мой нос сейчас
+      станет больше.",
+    is_choices: true, is_enabled: true}
+- model: main.paradox
+  pk: 4
+  fields: {header: "Парадокс неожиданной
+      казни", content: "Если сказать
+      осуждённому на
+      казнь, что она произойдёт
+      в неожиданный для
+      него день этой недели,
+      то он логически
+      придёт к выводу,
+      что она не может
+      произойти ни в один
+      из дней недели.
+      Тогда она и будет
+      сюрпризом.", is_choices: true,
+    is_enabled: true}
+- model: main.paradox
+  pk: 5
+  fields: {header: "Парадокс убитого
+      дедушки", content: "Вы перемещаетесь
+      в прошлое и убиваете
+      своего дедушку
+      до того, как он познакомился
+      с Вашей бабушкой.
+      Из-за этого Вы не
+      сможете появиться
+      на свет и, следовательно,
+      не сможете убить
+      своего дедушку.",
+    is_choices: true, is_enabled: true}
+- model: main.paradox
+  pk: 6
+  fields: {header: "Парадокс Гиффена",
+    content: "Если цены на хлеб
+      начнут повышаться,
+      люди станут покупать
+      его больше.", is_choices: true,
+    is_enabled: true}
+- model: main.paradox
+  pk: 7
+  fields: {header: "Парадокс Гегеля",
+    content: "История учит
+      человека тому, что
+      человек ничему
+      не учится из истории.",
+    is_choices: true, is_enabled: true}
+- model: main.paradox
+  pk: 8
+  fields: {header: "Парадокс определения",
+    content: "Невозможно дать
+      определение определению,
+      ибо пока мы не дали
+      это определение,
+      само понятие определения
+      остается неизвестным.",
+    is_choices: true, is_enabled: true}
+- model: main.paradox
+  pk: 9
+  fields: {header: "Парадокс слуги",
+    content: "Прикажите слуге
+      не слушаться Вас.
+      Не слушаясь Вас,
+      он ослушается приказа,
+      так как он исполняет
+      его, слушаясь Вас.",
+    is_choices: true, is_enabled: true}
+- model: main.paradox
+  pk: 10
+  fields: {header: "Парадокс интернета",
+    content: "Вероятность существования
+      нужной информации
+      в Интернете возрастает,
+      а возможность её
+      найти уменьшается.",
+    is_choices: true, is_enabled: true}
+- model: main.paradox
+  pk: 11
+  fields: {header: "Парадокс нигилизма",
+    content: "Если правды не
+      существует, то утверждение
+      «правды не существует»
+      верно, что доказывает
+      его неверность.",
+    is_choices: true, is_enabled: true}
+- model: main.paradox
+  pk: 12
+  fields: {header: "Парадокс всемогущества",
+    content: "Может ли всемогущее
+      существо создать
+      камень, который
+      оно само не сможет
+      поднять?", is_choices: true, is_enabled: true}

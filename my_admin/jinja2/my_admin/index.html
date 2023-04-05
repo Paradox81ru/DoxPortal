@@ -1,0 +1,24 @@
+{% import 'macros/resources.html' as resources %}
+
+<!DOCTYPE html>
+<html lang="ru-RU">
+<head>
+    <meta charset="UTF-8">
+    <link type="image/png" href="{{  static('favicon.png') }}" rel="shortcut icon">
+    <title>dox-портал админка</title>
+    {{ resources.css('other/bootstrap/css/bootstrap') }}
+    {{ resources.css('other/font-awesome/css/all') }}
+    {{ resources.css('common/css/my_addition') }}
+    {{ resources.css('my_admin/css/admin_site') }}
+    </head>
+    <body>
+        <div id="react"></div>
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div>
+                <p>© Жорж Парадокс, 2020-{{ today_date|format_date("Y") }}. При копировании материалов активная ссылка на сайт <a href="{{ url('main') }}">{{ request.get_host() }}</a> обязательна.</p>
+            </div>
+        </footer> <!-- /.footer -->
+     {{ resources.js('main/js/bundle') }}
+    </body>
+</html>

@@ -1,0 +1,94 @@
+[
+  {
+    "model": "accounts.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$36000$nMfSVVrgqN2n$yvfT5EtMcSdo4KwkA3U0i20uk4CYkHLXOIwGMsgOhEY=",
+      "last_login": null,
+      "is_superuser": true,
+      "username": "Admin",
+      "first_name": "",
+      "last_name": "",
+      "email": "admin@paradox-portal.ru",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2018-02-04T14:23:14.680525Z",
+      "role": 1,
+      "status": 10,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+    {
+    "model": "accounts.user",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$120000$erZ8wrqnVAbg$1SgJ1XPdeL4mZflqs6NGaLeXrj2Sifoc2xc201QYWmU=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "System",
+      "first_name": "Система",
+      "last_name": "",
+      "email": "info@paradox-portal.ru",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2018-02-04T14:23:14.680525Z",
+      "role": 2,
+      "status": 10,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 3,
+    "fields": {
+      "password": "pbkdf2_sha256$150000$hGaAQD3bpAvS$Ct6NDVI3BKnF0kOkOan+e9wzgyisy2HFuihANkvbRyw=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "Paradox",
+      "first_name": "George",
+      "last_name": "Paradox",
+      "email": "director@paradox-portal.ru",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2018-02-04T14:23:14.680525Z",
+      "role": 20,
+      "status": 10,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 4,
+    "fields": {
+      "password": "pbkdf2_sha256$36000$czPcPLbtzWt4$NiKqSsixr28+GGbDBDJAoJKP9F0txa7qb4QzGRRco+s=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "User",
+      "first_name": "",
+      "last_name": "",
+      "email": "paradox81ru@hotmail.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2018-02-04T14:24:14.680525Z",
+      "role": 40,
+      "status": 10,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "accounts.tempuser",
+    "pk": "nW1cUG2xefiyB1OiFRQFOA66",
+    "fields": {
+      "role": 40,
+      "username": "User1",
+      "password": "pbkdf2_sha256$36000$JyiACMyOQLfc$fyfz3PMEZrSEJEdP1r+b4MrGfLIpeT58aRKdaefxD8U=",
+      "email": "user1@mail.local",
+      "date_joined": "2017-06-24T07:19:52.076Z",
+      "process": 1
+    }
+  }
+]

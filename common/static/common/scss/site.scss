@@ -1,0 +1,204 @@
+@import "../../scss/_main";
+@import "../../scss/_mixins";
+
+@mixin html-begin {
+  height: 100%;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #333;
+  background-color: #fff;
+}
+
+html {
+  /*  @include html-begin;  */
+}
+
+@font-face {
+  font-family: 'Isabella-Decor';
+  src: url(../fonts/Isabella-Decor.ttf);
+}
+
+div.tooltip {
+  ul {
+    padding-left: 9px;
+    li {
+      font-size: 0.9em;
+      text-align: justify;
+    }
+  }
+}
+
+body {
+  div.wrap {
+
+    & > .body {
+      margin-top: 25px;
+    }
+
+    /* HEADER */
+    header {
+      background: teal;
+
+      .logo-data {
+        .header-paradox {
+          color: orange;
+          font-family: 'Isabella-Decor', sans-serif;
+          font-size: 26px;
+          padding: 5px;
+          text-align: right;
+          font-weight: bold;
+          text-shadow: 0 4px 3px rgba(0, 0, 0, 0.4), 0 8px 13px rgba(0, 0, 0, 0.1), 0 18px 23px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: end;
+          margin: 0 20px 5px 0;
+        }
+      }
+    } /* .header */
+
+    /* UNDER HEADER */
+    .under-header {
+      overflow: hidden;
+      background-color: #f5f5f5;
+      height: 36px;
+      margin-bottom: 10px;
+
+      // Заменяет окраску ссылок стандартного окраса bootstrap.
+      a, .btn-link {
+        color: teal;
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+
+      nav {
+        padding: 4px 0 0 40px;
+        margin-right: -15px;
+        margin-left: -15px;
+        display: inline-block;
+
+        ol.breadcrumb {
+          margin: 0;
+          padding: 0;
+          background-color: transparent;
+        }
+      }
+
+      .login {
+        padding: 4px 40px 0 0;
+
+        form {
+          margin-top: -8px;
+
+          /* Иконка личных сообщений */
+          .personal-message {
+            position: relative;
+            vertical-align: middle;
+            margin-top: 5px;
+            display: inline-block;
+
+            /* Количество сообщений */
+            .badge {
+              position: absolute;
+              top: 14px;
+              left: 15px;
+            }
+
+            .badge.hidden {
+              display: none;
+            }
+          }
+        }
+      }
+    } /* .under header */
+  }
+
+  #left-sidebar {
+    margin-top: 10px;     // Смещение левого сайдбара вниз
+    padding: 0 15px 0 0;  // Смещение левого сайдбара вправа (к левому краю)
+    // transition: flex 2s ease;  // Анимация изменения ширины левого сайдбара.
+
+    // Класс скрытия левого сайдбара
+    //&.col-lg-0 {
+    //  padding: 0;
+    //  flex: 0 0 0;
+    // max-width: 0;
+    //  overflow: hidden;
+    //}
+  }
+
+  #main-content {
+    padding: 0 0 0 15px;
+    // transition: flex 1s ease; // Анимация изменения ширины содержимого.
+
+    h1.title {
+      /*        margin-top: 0;  */
+    }
+
+    #pjax-container {
+      /*        width: 100%;  */
+    }
+  }
+
+  /* FOOTER */
+  footer {
+    margin-top: 20px;
+    background-color: #f5f5f5;
+    border-top: 1px solid #ddd;
+    width: 100%;
+    text-align: center;
+    padding-bottom: 10px;
+
+    .metrica-informer {
+      max-width: 1140px;
+      text-align: left;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  } /* .footer */
+}
+
+/* @MEDIA */
+@media (max-width: 1200px) {
+  .header .container .header-paradox {
+    line-height: 1;
+  }
+}
+
+@media (min-width: 992px) {
+  .logo-data {
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 992px) {
+  .header .container .header-paradox {
+    display: none;
+  }
+
+  .logo-data {
+    justify-content: end;
+  }
+}
+
+@media (min-width: 768px) {
+
+}
+
+@media(max-width: 768px) {
+
+}
+
+@media (min-width: 576px) {
+
+}
+
+@media (max-width: 576px) {
+
+}

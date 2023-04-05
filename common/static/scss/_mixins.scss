@@ -1,0 +1,295 @@
+//@import "../../bourbon/_bourbon";
+@import "main";
+@import "helpers";
+
+//Градиент четырех оттенков одного цвета
+@mixin gradientFourHue($color) {
+  $color_1: lighten($color, 40%);
+  $color_2: lighten($color, 10%);
+  $color_3: $color;
+  $color_4: lighten($color, 15%);
+  background: $color;
+  background: -moz-linear-gradient(top, $color_1 0%, $color_2 50%, $color_3 51%, $color_4 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, $color_1), color-stop(50%, $color_2), color-stop(51%, $color_3), color-stop(100%, $color_4));
+  background: -webkit-linear-gradient(top, $color_1 0%, $color_2 50%, $color_3 51%, $color_4 100%);
+  background: -o-linear-gradient(top, $color_1 0%, $color_2 50%, $color_3 51%, $color_4 100%);
+  background: -ms-linear-gradient(top, $color_1 0%, $color_2 50%, $color_3 51%, $color_4 100%);
+  background: linear-gradient(to bottom, $color_1 0%, $color_2 50%, $color_3 51%, $color_4 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{$color_1}', endColorstr='#{$color_3}', GradientType=0);
+}
+
+@mixin borderRadius($left-top, $right-top, $right-bottom, $left-bottom) {
+  -webkit-border-radius: $left-top $right-top $right-bottom $left-bottom;
+  -moz-border-radius: $left-top $right-top $right-bottom $left-bottom;
+  border-radius: $left-top $right-top $right-bottom $left-bottom;
+}
+
+//Скругление всех углов
+@mixin allBorderRadius($radius) {
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  border-radius: $radius;
+}
+
+//Кнопка с градиентом четырех оттенков одного цвета
+@mixin buttonGradientFourHue($color) {
+  $borderColor: darken($color, 15%);
+  @include allBorderRadius(4px);
+  padding: 5px;
+  @include gradientFourHue($color);
+  border: $borderColor solid thin;
+  //  border-bottom:none;
+}
+
+//Тень (цвет, ширина, смещение по горизонтали, смещение по вертикали)
+@mixin doxShadow($color, $wide, $hOffset: 0, $vOffset: 0) {
+  -webkit-box-shadow: $hOffset $vOffset $wide $color;
+  -moz-box-shadow: $hOffset $vOffset $wide $color;
+  box-shadow: $hOffset $vOffset $wide $color;
+  //filter: progid:DXImageTransform.Microsoft.dropshadow(offX=5, offY=5, color=#000000);
+  filter: progid:DXImageTransform.Microsoft.shadow(direction=120, color=#{$color}, strength=#{$wide});
+}
+
+@mixin fillCaretDirect($direct, $size, $color) {
+  border-#{nth($direct, 1)}: 0;
+  border-#{nth($direct, 2)}: #{$size}px solid #{$color};
+  border-#{nth($direct, 3)}: #{$size}px solid transparent;
+  border-#{nth($direct, 4)}: #{$size}px solid transparent;
+}
+
+//////////////////////////////////////////////////////////////
+// Создает направленную стрелку                             //
+// $direct - направление стрелки: up, down, left или right  //
+// $size - размер стрелки                                   //
+// $color - цвет стрелки; если null, то будет цветом текста //
+//////////////////////////////////////////////////////////////
+@mixin caretDirection($direct, $size:5, $color:null) {
+  $up: top, bottom, right, left;
+  $down: bottom, top, right, left;
+  $left: left, right, top, bottom;
+  $right: right, left, top, bottom;
+
+  @if ($direct == up) {
+    @include fillCaretDirect($up, $size, $color);
+  } @else if ($direct == down) {
+    @include fillCaretDirect($down, $size, $color);
+  } @else if ($direct == left) {
+    @include fillCaretDirect($left, $size, $color);
+  } @else if ($direct == right) {
+    @include fillCaretDirect($right, $size, $color);
+  }
+
+//  height: #{$size}px;
+//   width: #{$size}px;
+//
+  display: inline-block;
+
+}
+
+///////////////////////////////////////
+//     Конвертирует цвет в альфа     //
+///////////////////////////////////////
+@function colorAlphaConvert($color) {
+  $alpha: alpha($color);
+  @return if($alpha < 1, change_color($color, $alpha: 1), $color);
+}
+
+//////////////////////////////////////////////////////////////
+// Разбивает  строку цвет-процент на список цвет и процент  //
+/////////////////////////////////////////////////////////////
+@function breakColorPercent($color-percent) {
+  $color: nth($color-percent, 1);
+  $percent: null;
+  @if length($color-percent) == 2 {
+    $percent: nth($color-percent, 2);
+  }
+
+  @return ($color, $percent);
+}
+
+////////////////////////////////////////
+// Формирует список цветов градиента  //
+////////////////////////////////////////
+@function gradientColorList ($colors-list) {
+  $webkit: '';
+  $general: '';
+  $ie: '';
+  //  $color-first: '';
+  //  $color-end: '';
+
+  // Если длинна списка равна двум, значит градиент будет простой, состоящий только из двух цветов.
+  @if length($colors-list) == 2 {
+    $color-from: nth($colors-list, 1);
+    @if type_of($color-from) == list {
+      $color-from: nth($color-from, 1);
+    }
+    $color-to: nth($colors-list, 2);
+    @if type_of($color-to) == list {
+      $color-to: nth($color-to, 1);
+    }
+
+    $webkit: 'color-stop(0%, #{$color-from}), color-stop(100%, #{$color-to})';
+    $general: '#{$color-from}, #{$color-to}';
+    $ie: "startColorstr='#{ie-hex-str($color-from)}', endColorstr='#{ie-hex-str($color-to)}'";
+    //    $color-first: colorAlphaConvert($color-from);
+    //    $color-end: colorAlphaConvert($color-to);
+  } @else {
+    // Иначе градиент будет сложный, с процентами.
+    // Определим счетчик градиентов.
+    $i: 1;
+    @each $color-percent in $colors-list {
+      // Разобъем комплект отдельно на цвет и процент.
+      $b-g-k: breakColorPercent($color-percent);
+      $color: nth($b-g-k, 1);
+      $percent: nth($b-g-k, 2);
+
+      // Далее проверим, если это первый градиент,
+      @if $i == 1 {
+        // то добавим его для градиента експлорера.
+        $ie: "startColorstr='#{ie-hex-str($color)}',";
+        //        $color-first: colorAlphaConvert($color);
+      } @else if $i == length($colors-list) {
+        // И последний градиент тоже нужен для эксплорера.
+        $ie: $ie + " endColorstr='#{ie-hex-str($color)}'";
+        // Также последний цвет будет цветом по умолчанию.
+        //        $color-end: colorAlphaConvert($color);
+      }
+
+      $webkit: $webkit + "color-stop(#{$percent}, #{$color})";
+      $general: $general + '#{$color-percent}';
+      // Будем добавлять запятые, пока элемент сипска не последний.
+      @if $i < length($colors-list) {
+        $webkit: $webkit + ', ';
+        $general: $general + ', ';
+      }
+      $i: $i+1;
+    }
+  }
+  @return ('webkit': $webkit, 'general': $general, 'ie': $ie);
+}
+
+////////////////////////////////////////
+// Формирует направление из градусов  //
+///////////////////////////////////////
+@function directFromDegrees($direction) {
+  $deg: str_slice($direction, 1, -4);
+
+  $general: $direction;
+  $webkit: '';
+  $spec: '';
+  $ie: 'GradientType=0'; // тип градиента линейный
+
+  $deg: stringToNumber($deg);
+  @if $deg < 22 {
+    $webkit: 'left top, right top';
+  } @else if $deg < 67 {
+    $webkit: 'right top, left bottom';
+  } @else if $deg < 112 {
+    $webkit: 'left top, left bottom';
+  } @else if $deg < 157 {
+    $webkit: 'right bottom, left top';
+  } @else if $deg < 202 {
+    $webkit: 'right top, left top';
+  } @else if $deg < 247 {
+    $webkit: 'right bottom, left top';
+  } @else if $deg < 292 {
+    $webkit: 'left bottom, left top';
+  } @else if $deg < 337 {
+    $webkit: 'left bottom, right top';
+  } @else {
+    $webkit: 'left top, right top';
+  }
+
+  $spec: if($deg <= 90, '#{90 - $deg}deg', '#{360-($deg - 90)}deg');
+
+  @return ('webkit': $webkit, 'spec': $spec, 'general': $general, 'ie': $ie)
+}
+
+//////////////////////////////////////
+// Формирует направление из строки  //
+//////////////////////////////////////
+@function directFromString($direction) {
+  $spec-convert: ('top': 'to bottom', 'bottom': 'to top', 'left': 'to right', 'right' : 'to left',
+          'top left': 'to bottom right', 'bottom right': 'to top left',
+          'top right': 'to bottom left', 'bottom left': 'to top right');
+  $webkit-convert: ('top': 'left top, left bottom', 'bottom': 'left bottom, left top',
+          'left': 'left top, right top', 'right': 'right top, left top',
+          'top left': 'left top, right bottom', 'bottom right': 'right bottom, left top',
+          'top right': 'right top, left bottom', 'bottom left': 'left bottom, right top');
+
+  $general: $direction;
+  $webkit: map_get($webkit-convert, $direction);
+  $spec: '';
+  $ie: 'GradientType=0'; // тип градиента линейный
+
+  // Если передали направление которое можно сконвертировать, то получим сконвертированное значение.
+  $spec: if(map_has_key($spec-convert, $direction), map_get($spec-convert, $direction), $direction);
+
+  @return ('webkit': $webkit, 'spec': $spec, 'general': $general, 'ie': $ie)
+}
+
+///////////////////////////////////////////////////////////////////////////
+// Кроссбраузерный линейный градиент                                     //
+// $direction - направление градиента (например 'top left' или 135deg)   //
+// $color-list - список градиентов. Если градиента два, то только цвета, //
+//   если больше двух, то через пробел после цвета указывается процент   //
+//  (например #ef0000 0%, #f77677 50%, #008080 80%, #ffffff 100%).       //
+///////////////////////////////////////////////////////////////////////////
+@mixin linearGradient($direction: top, $color-list...) {
+  $gradient-color-direct: '';
+  $gradient-color-list: gradientColorList($color-list);
+
+  @if type_of($direction) == list {
+
+  } @else {
+    @if type_of($direction) == number {
+      $direction: inspect($direction);
+    }
+    // Если направление указали в градусах,
+    @if str-slice($direction, -3) == 'deg' {
+      // то преобразуем градусы в направление учитывая кроссбраузерность.
+      $gradient-color-direct: directFromDegrees($direction);
+    } @else {
+      // Иначе оптимизируем направление для кроссбраузерности.
+      $gradient-color-direct: directFromString($direction);
+    }
+  }
+
+  $general-colors: map_get($gradient-color-list, 'general');
+  $general-direct: map_get($gradient-color-direct, 'general');
+  $webkit-colors: map_get($gradient-color-list, 'webkit');
+  $webkit-direct: map_get($gradient-color-direct, 'webkit');
+  $ie-colors: map_get($gradient-color-list, 'ie');
+  $ie-direct: map_get($gradient-color-direct, 'ie');
+  $spec-direct: map_get($gradient-color-direct, 'spec');
+  //  $color-first: map_get($gradient-color-list, 'color-first');
+  //  $color-end: map_get($gradient-color-list, 'color-end');
+
+  background-image: linear-gradient(#{$spec-direct}, #{$general-colors}); // Opera 15+, Chrome 25+, IE 10+, Firefox 16+, Safari 6.1+, iOS 7+, Android 4.4+
+  background-image: -webkit-gradient(linear, #{$webkit-direct}, #{$webkit-colors});
+  background-image: -webkit-linear-gradient(#{$general-direct}, #{$general-colors}); // Safari 5.1, iOS 5.0-6.1, Chrome 10-25, Android 4.0-4.3
+  background-image: -moz-linear-gradient(#{$general-direct}, #{$general-colors}); // FF3.6
+  background-image: -ms-linear-gradient(#{$general-direct}, #{$general-colors}); // IE10
+  background-image: -o-linear-gradient(#{$general-direct}, #{$general-colors}); // Opera 11.10+
+  -ms-filter: progid:DXImageTransform.Microsoft.gradient(#{$ie-colors}, #{$ie-direct});
+  //  background-color: $color-first;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// Кроссбраузерный радиальный градиент                                                              //
+// $direction - направление строкой (top left), в процентах (0% 100%) или координатах (10px 30px).  //
+// $shape - фигура ellipse или circle.                                                              //
+// $size - размер (farthest-corner, closest-corner, farthest-side, closest-side)                    //
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+@mixin radialGradient($direction: 'center', $shape: 'ellipse', $size: 'farthest-corner', $color-list...) {
+  $color-end: nth($color-list, length($color-list));
+  @if type_of($color-end) == list {
+    $color-end: nth($color-end, 1)
+  }
+
+  background-color: $color-end;
+  background: -moz-radial-gradient(#{$direction}, #{$shape} #{$size}, #{$color-list});
+  background: -webkit-radial-gradient(#{$direction}, #{$shape} #{$size}, #{$color-list});
+  background: radial-gradient(#{$shape} #{$size} at #{$direction}, #{$color-list});
+  background: -ms-radial-gradient(#{$direction}, #{$shape} #{$size}, #{$color-list});
+}

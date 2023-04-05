@@ -1,0 +1,48 @@
+.task2 {
+  margin: 0;
+
+  .contacts {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .contact-card {
+    flex-basis: 250px;
+    margin: 20px;
+  }
+
+  .contact-card > img {
+    width: 100%;
+    height: auto;
+  }
+
+  .contact-card > h3 {
+    text-align: center;
+    color: #3AC1EF;
+  }
+
+  .contact-card > p {
+    font-size: 12px;
+  }
+
+  p.counter {
+    font-size: 3em;
+  }
+
+  button {
+    border: 1px solid lightgray;
+    background-color: transparent;
+    padding: 10px;
+    border-radius: 4px;
+  }
+
+  button:hover {
+    cursor: pointer;
+    border-color: gray;
+  }
+
+  button:focus {
+    outline: 0;
+  }
+}
+

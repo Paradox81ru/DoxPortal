@@ -1,0 +1,42 @@
+//@import "../../../bourbon/bourbon";
+
+//== Цвета
+//
+
+$color-light-primary: rgba(0, 128, 128, 0.31);
+$color-primary: teal; //#008080
+$color-dark-primary: #005f5f;
+
+$color-light-secondary: #ffc356;
+$color-secondary : orange; //#FFA500
+$color-dark-secondary: #b67300;
+
+$color-neutral: #474747;
+$color-success: #3c763d;
+$color-info: #31708f;
+$color-warning: #8a6d3b;
+$color-danger: #a94442;
+
+//## Серый и фирменные цвета.
+
+$color-gray-base:              #000;
+$color-gray-darker:            lighten($color-gray-base, 13.5%); // #222
+$color-gray-dark:              lighten($color-gray-base, 20%);   // #333
+$color-gray:                   lighten($color-gray-base, 33.5%); // #555
+$color-gray-light:             lighten($color-gray-base, 46.7%); // #777
+$color-gray-lighter:           lighten($color-gray-base, 93.5%); // #eee
+
+$brand-primary:         #337ab7;
+$brand-success:         #5cb85c;
+$brand-info:            #5bc0de;
+$brand-warning:         #f0ad4e;
+$brand-danger:          #d9534f;
+
+$list-official-color: ('neutral', 'success', 'info', 'warning', 'danger');
+$map-official-color:(
+        neutral: $color-neutral,
+        success: $color-success,
+        info: $color-info,
+        warning: $color-warning,
+        danger: $color-danger
+);

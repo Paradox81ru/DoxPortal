@@ -1,0 +1,181 @@
+$status-colors: (
+        default: (#333, #fff,    #ccc,    #e6e6e6, #8c8c8c, #adadad),
+        primary: (#fff, #337ab7, #2e6da4, #286090, #122b40, #204d74),
+        secondary: (#fff, rgba(108, 117, 125, 0.5), #6c757d, #545b62, #6c757d, #5a6268),
+        success: (#fff, #5cb85c, #4cae4c, #449d44, #255625, #398439),
+        info:    (#fff, #5bc0de, #46b8da, #31b0d5, #1b6d85, #269abc),
+        warning: (#fff, #f0ad4e, #eea236, #ec971f, #985f0d, #d58512),
+        danger:  (#fff, #d9534f, #d43f3a, #c9302c, #761c19, #ac2925),
+        light:  (#333, rgba(248, 249, 250, 0.5), f8f9fa, #dae0e5, #f8f9fa, #e2e6ea),
+        dark:  (#fff, rgba(52, 58, 64, 0.5), #343a40, #1d2124, #343a40, #23272b)
+);
+
+#left-sidebar {
+  .display-menu {
+    bottom: 1px;
+    width: 50px;
+    display: none;
+  }
+
+  i {
+    font-size: 1.2em;
+  }
+
+
+  .dox-bootstrap-menu {
+    width: 100%;
+    font-size: 1.3em;
+
+    // Белые разделительные верхние границы у кнопок с выпадающим меню
+    .btn-group:not(:first-child) {
+      .btn:not(.btn-default) {
+        border-top: 1px solid #ffffff;
+      }
+    }
+
+    // Белые разделительные верхние границы у кнопок без выпадающего меню
+    //button:not(:first-child) {
+    //  border-top: 1px solid #ffffff;
+    //}
+
+    .btn-group .dropdown-toggle::after {
+      float: right;
+      margin-top: 8px;
+    }
+
+    a.disabled, a[disabled] {
+      cursor: not-allowed;
+    }
+
+    .btn {
+      &:focus, &:active:focus {
+        box-shadow: none !important;
+      }
+
+      &.dropdown-toggle {
+        padding-left: 10px;
+        padding-right: 5px;
+      }
+
+      .label-button-menu {
+        font-size: 1.3em; /* Размер иконки и текста в кнопке */
+      }
+
+      .label-icon + .label-text {
+        margin-left: 5px;
+      }
+
+      span.caret-right {
+        float: right;
+        margin-top: 5px;
+      }
+    }
+
+    & > .btn-link {
+      display: block;
+      padding: 7px 6px;
+    }
+
+    // Отступ слева блока подменю
+    .dropdown-menu {
+      padding: 0;
+      margin-left: 0.1rem;
+      font-size: 0.9em; /* Размер иконки и текста в подменю */
+
+      .dropdown-item:not(:first-child) {
+        border-top: 1px solid #ccc;
+      }
+
+      // Добавить отступы сверху и снизу у заголовка подменю
+      > .dropdown-header {
+        margin: 3px 0 3px 0;
+      }
+
+      > li > .btn {
+        display: block;
+        width: 100%;
+        padding: 3px 20px;
+        clear: both;
+        font-weight: normal;
+        line-height: 1.42857143;
+        white-space: nowrap;
+        border-left-color: transparent;
+        border-right-color: transparent;
+      }
+
+      // Убрать скругление углов у всех конопок кроме первой и последней,
+      // и кроме того убрать у этих кнопок нижнюю границу, чтобы не было двойных границ между пунктами меню.
+      > li:not(:first-child):not(:last-child) > .btn {
+        border-radius: 0;
+        border-bottom: none;
+      }
+
+      // Убрать скругление только верхних углов последней кнопки
+      > li:last-child:not(:first-child) > .btn {
+        border-top-right-radius: 0;
+        border-top-left-radius: 0;
+      }
+
+      // Убрать скругление только нижних углов первой кнопки
+      > li:first-child:not(:last-child) > .btn {
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+    }
+  }
+}
+
+.dox-bootstrap-menu .dropdown-menu > li {
+  & > .btn {
+    @each $status, $colors in $status-colors {
+      &-#{$status} {
+        color: nth($colors, 1);
+        background-color: nth($colors, 2);
+        border-color: nth($colors, 3);
+        &.focus, &:focus {
+          background-color: nth($colors, 4);
+          border-color: nth($colors, 5);
+        }
+        &:hover {
+          background-color: nth($colors, 4);
+          border-color: nth($colors, 6);
+        }
+      }
+    }
+  }
+
+  & > .btn-link {
+    font-weight: normal;
+    color: #337ab7;
+    border-radius: 0;
+    &:hover, &:focus, &.focus {
+      color: #23527c;
+      text-decoration: underline;
+      background-color: transparent;
+    }
+  }
+}
+
+@media (max-width: 992px) {
+    #left-sidebar {
+      .display-menu{
+        display: block; // При уменьшении формы, когда уменьшиться меню, нужно отобразить кнопку отображения меню
+      }
+
+      .dox-bootstrap-menu {
+        width: 50px;          // Уменьшим ширину левого меню до минимума.
+        position: absolute; // Убирем привязку левого сайдбара к позиции содержимого
+        z-index: 10;
+      }
+    }
+
+
+}
+
+@media (max-width: 576px) {
+  #left-sidebar {
+    .dox-bootstrap-menu{
+      display: none;
+    }
+  }
+}

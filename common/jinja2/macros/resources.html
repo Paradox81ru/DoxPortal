@@ -1,0 +1,25 @@
+{% set debug = is_debug() %}
+
+{% macro css() %}
+    {% for var in varargs %}
+        {% set css %}{% if 'path' in kwargs %}{{ kwargs['path'] }}{% endif %}{{ var }}{% if not debug %}.min{% endif %}.css{% endset %}
+        <link href="{{ static(css) }}" rel="stylesheet">
+    {% endfor %}
+{% endmacro %}
+
+{# Ресурс javScript с поддержкой минификации #}
+{% macro js() %}
+    {% for var in varargs %}
+        {% set js %}{% if 'path' in kwargs %}{{ kwargs['path'] }}{% endif %}{{ var }}{% if not debug %}.min{% endif %}.js{% endset %}
+        <script type="text/javascript" src="{{ static(js) }}"></script>
+    {% endfor %}
+{% endmacro %}
+
+{# Ресурс javScript с поддержкой ES6 и минификации #}
+{% macro js6(request) %}
+    {% if request.is_js6 %} {% set js='js6/' %} {% else %} {% set js='js/' %} {% endif %}
+    {% for var in varargs %}
+        {% set path %}{{ kwargs['path'] }}{{ js }}{{ var }}{% if not debug %}.min{% endif %}.js{% endset %}
+        <script type="text/javascript" src="{{ static(path) }}"></script>
+    {% endfor %}
+{% endmacro %}
