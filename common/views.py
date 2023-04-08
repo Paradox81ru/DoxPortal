@@ -1,7 +1,8 @@
 from django.utils import timezone
 from django.contrib.auth.models import AnonymousUser
+from rest_framework import permissions
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 
 from main.models import Paradox, get_breadcrumb_list, get_main_menu_list, get_main_menu
 from accounts.models import User
@@ -28,6 +29,7 @@ def get_begin_data(request):
 
 
 @api_view(["GET"])
+@permission_classes([permissions.AllowAny])
 def get_login_form_data(request):
     login_form_field_meta_data_serializer = FormFieldMetaDataSerializer(User.field_meta_data, many=True)
     return Response(login_form_field_meta_data_serializer.data)
