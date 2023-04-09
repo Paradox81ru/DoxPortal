@@ -1,6 +1,8 @@
 from django.utils import timezone
 from django.contrib.auth.models import AnonymousUser
 from rest_framework import permissions
+from rest_framework.views import APIView
+from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 
@@ -31,5 +33,15 @@ def get_begin_data(request):
 @api_view(["GET"])
 @permission_classes([permissions.AllowAny])
 def get_login_form_data(request):
+    """ Возвращает данные для формы страницы авторизации """
     login_form_field_meta_data_serializer = FormFieldMetaDataSerializer(User.field_meta_data, many=True)
     return Response(login_form_field_meta_data_serializer.data)
+
+
+class GetAboutPage(APIView):
+    """ Возвращает статические данные для страницы "О сайте" """
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = "main/fragments/about.html"
+
+    def get(self, request):
+        return Response()

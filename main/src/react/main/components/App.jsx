@@ -15,6 +15,8 @@ import UnderHeader from "./main/under_header/UnderHeader";
 import Body from "./main/body/Body";
 import Login_W from "./main/body/content/Auth/Login";
 import Logout_W from "./main/body/content/Auth/Logout";
+import About_W from "./main/body/content/main/About";
+import Copyright from "./main/body/content/main/Copyright";
 import AllUsers from "./main/body/content/test/AllUsers";
 import {getFetchHeaders, resolveBeginData} from "../lib/send_request_util";
 import {changeMainMenu, changeUserAuthentication} from "../store/actions/generalActions";
@@ -155,8 +157,12 @@ export default class App extends Component{
                                          isShowCaptcha={this.state.isShowCaptcha} setShowCaptcha={this.setShowCaptcha}
                                              isRememberMy={this.getRememberMy()} />} />
                             <Route path="/logout" element={<Logout_W />} />
-                            <Route path="/about" element={<p>О сайте</p>} />
-                            <Route path="/copyright" element={<p>Права на сайт</p> } />
+                            <Route path="/about" element={
+                                <About_W setStyle={this.setListStyles} clearStyle={this.clearListStyles} />
+                            } />
+                            <Route path="/copyright" element={
+                                <Copyright currentYear={this.state.currentYear} siteDomainName={this.state.siteDomainName}/>
+                            } />
                             <Route path="/contact" element={<p>Контакты</p>} />
                             <Route path="/signup" element={<p>Регистрация</p>} />
                             <Route path="/get-all-users" element={<AllUsers />} />
