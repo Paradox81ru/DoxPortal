@@ -1,4 +1,6 @@
 import {getToken, saveToken, whereRememberToken} from "./auth_token_util";
+import {addSystemMessage} from "../store/actions/generalActions";
+import store from "../store/store";
 import {UnauthorizedError, ForbiddenError, TokenAccessExpired, UnknownResponseError} from "./errors";
 
 /**
@@ -42,41 +44,24 @@ function sendRequest(url, method, data=undefined) {
                     // А если нет, то проверяю какая ошибка помешала запросу.
                     switch (error.name) {
                         case "UnauthorizedError":
-                        case "UnknownResponseError":
                             // Если это ошибка авторизации или неизвестная ошибка,
                             // то её надо обработать предоставленным reject-ом.
                             reject(error);
                             break;
                         case "TokenAccessExpired":
                             console.log(error.message);
+                            // addSystemMessage("danger", error.message)
+                             reject(error);
                             break;
-                        // case "TokenAccessExpired":
-                        //     // А если ошибка окончания ключа обновления,
-                        //     // то произвожу запрос на обновление ключа доступа.
-                        //     requestNewTokenAccess()
-                        //         .then(result => {
-                        //             // Если в результате обновления токена доступа вернулся true,
-                        //             if (result === true) {
-                        //                 // запрашиваю ещё и новый токен обновления,
-                        //                 return  requestNewRefreshToken()
-                        //                     // после чего снова делаю повторный запрос.
-                        //                     .then(() => proxyFetch(url, method, data));
-                        //             } else
-                        //                 // После обновления ключа доступа делаю повторный запрос.
-                        //                 return proxyFetch(url, method, data);
-                        //         },
-                        //                 error => {
-                        //             // Если при получении нового токена доступа возникла ошибка, то надо как-то её обработать.
-                        //                     console.log("Ошибка получения нового токена доступа " + error.message);
-                        //         })
-                        //         // Если всё нормально, то возвращаю корректный ответ.
-                        //         .then(response => {
-                        //             resolve(response);
-                        //         })
-                        //         .catch(() => {
-                        //             // А если вновь ошибка, то уже возвращаю неизвестную ошибку.
-                        //             throw new UnknownResponseError("Не удаётся обновить просроченный токен доступа.", 401);
-                        //         });
+                        case "UnknownResponseError":
+                             // Если это неизвестная ошибка,
+                            let message = `Неизвестная ошибка код ${error.code}; ${error.message}`;
+                            // то её надо отобразить,
+                            console.log(message);
+                            _addSystemMessage("danger", message);
+                            // а затем обработать предоставленным reject-ом.
+                            reject(error);
+                        break;
                     }
                 });
     })
@@ -237,6 +222,15 @@ function resolveBeginData(urlBegin, isAdmin=false) {
         return fetch(url, options)
             .then(response => response.json());
     }
+}
+
+/**
+ * Добавляет системное сообщение
+ * @param type
+ * @param message
+ */
+function _addSystemMessage(type, message) {
+    store.dispatch(addSystemMessage(type, message));
 }
 
 export {getFetchHeaders, sendRequest, resolveBeginData};

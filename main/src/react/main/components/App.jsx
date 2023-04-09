@@ -18,7 +18,10 @@ import Logout_W from "./main/body/content/Auth/Logout";
 import AllUsers from "./main/body/content/test/AllUsers";
 import {getFetchHeaders, resolveBeginData} from "../lib/send_request_util";
 import {changeMainMenu, changeUserAuthentication} from "../store/actions/generalActions";
+import {sendRequest} from "../lib/send_request_util";
 import {setHeaderDate} from "../store/actions/cachePagesActions";
+import {addSystemMessage} from "../store/actions/generalActions";
+import {removeToken} from "../lib/auth_token_util";
 
 export default class App extends Component{
         constructor() {
@@ -50,6 +53,15 @@ export default class App extends Component{
         });
     }
 
+    /**
+     * Добавляет системное сообщение
+     * @param type
+     * @param message
+     */
+    _addSystemMessage(type, message) {
+        store.dispatch(addSystemMessage(type, message));
+    }
+
     /** Для формы логина передаёт параметр "remember my" */
     getRememberMy() {
         return this.state.whereRememberToken === REMEMBER_LOCAL
@@ -69,18 +81,29 @@ export default class App extends Component{
         // this.setState({
         //     whereRememberToken: whereRememberToken()
         // });
-        this.sendBeginDataRequest();
+        // Защита от бесконечного цикла.
+        let block = false;
+        this.sendBeginDataRequest()
+           .then(resp => {
+               if (!resp && !block) {
+                   // Прежде чем запустить рекурсию, инициализирую блок от бе конечного цикла.
+                   block = true;
+                   this.sendBeginDataRequest();
+                   this._addSystemMessage("warning", "Токен доступа истёк");
+               }
+           })
     }
 
     /** Отправляет запрос на получение начальных данных */
     sendBeginDataRequest = () => {
-        let options = {headers: getFetchHeaders()};
-        fetch("/api/begin-data", options)
-            .then(response => {
-                if (response.status === 200)
-                // Если ответ корректный, то просто преобразую его в JSON и возвращаю дальше.
-                return response.json();
-            })
+        // let options = {headers: getFetchHeaders()};
+        // fetch("/api/begin-data", options)
+        //     .then(response => {
+        //         if (response.status === 200)
+        //         // Если ответ корректный, то просто преобразую его в JSON и возвращаю дальше.
+        //         return response.json();
+        //     })
+       return sendRequest("/api/begin-data", "GET")
             .then(data => {
                 store.dispatch(setHeaderDate(data));
                 store.dispatch(changeUserAuthentication(data));
@@ -91,6 +114,14 @@ export default class App extends Component{
                     siteDomainName: data.siteDomainName,
                     isLoading: false,
                 })
+                return true
+            })
+            .catch(error => {
+                if (error.name === "TokenAccessExpired") {
+                    removeToken();
+                    return false
+                }
+                return true
             })
 
         // fetch("/api/begin-data/1", options)
