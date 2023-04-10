@@ -9,14 +9,3 @@ class UserDataSerializer(serializers.ModelSerializer):
         model = User
         fields = ("username", "email", "first_name", "last_name")
 
-
-# noinspection PyAbstractClass
-class FormFieldMetaDataSerializer(serializers.Serializer):
-    fieldName = serializers.CharField()
-    id = serializers.CharField()
-    label = serializers.CharField()
-    fieldType = serializers.CharField()
-    isRequired = serializers.BooleanField()
-    inputAttributes = serializers.DictField()
-    helper = serializers.ListField()
-    valueList = serializers.ListField()

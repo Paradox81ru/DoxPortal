@@ -8,7 +8,8 @@ from rest_framework.decorators import api_view, permission_classes
 
 from main.models import Paradox, get_breadcrumb_list, get_main_menu_list, get_main_menu
 from accounts.models import User
-from accounts.serializers import FormFieldMetaDataSerializer
+from common.serializers import FormFieldMetaDataSerializer
+from main.serializers import ContactSerializer
 from common.serializers import BeginDataSerializer
 
 
@@ -38,10 +39,29 @@ def get_login_form_data(request):
     return Response(login_form_field_meta_data_serializer.data)
 
 
-class GetAboutPage(APIView):
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def get_contact_form_data(request):
+    contact_form_field_meta_data_serializer = FormFieldMetaDataSerializer(ContactSerializer.field_meta_data, many=True)
+    return Response(contact_form_field_meta_data_serializer.data)
+
+
+class AboutPageView(APIView):
     """ Возвращает статические данные для страницы "О сайте" """
     renderer_classes = [TemplateHTMLRenderer]
     template_name = "main/fragments/about.html"
 
     def get(self, request):
         return Response()
+
+
+class ContactView(APIView):
+    """ Отправляет форму обратной связи """
+    def post(self, request):
+        serializer = ContactSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.send_email()
+            return Response('{"success": "Ok}')
+        else:
+            error_data = {"error": "FieldValidateError", "data": serializer.errors}
+            return Response(error_data)

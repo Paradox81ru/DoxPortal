@@ -5,5 +5,7 @@ app_name = "common"
 urlpatterns = [
     path("begin-data", get_begin_data),
     path("get-login-form-data", get_login_form_data),
-    path("get-about-page", GetAboutPage.as_view())
+    path("get-contact-form-data", get_contact_form_data),
+    path("get-about-page", AboutPageView.as_view()),
+    path('contact', ContactView.as_view())
 ]

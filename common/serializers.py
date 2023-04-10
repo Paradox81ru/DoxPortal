@@ -23,3 +23,15 @@ class LoginSerializer(serializers.Serializer):
     userAuthentication = UserDataSerializer()
     token = serializers.CharField()
     mainMenu = MainMenuSerializer(many=True)
+
+
+# noinspection PyAbstractClass
+class FormFieldMetaDataSerializer(serializers.Serializer):
+    fieldName = serializers.CharField()
+    id = serializers.CharField()
+    label = serializers.CharField()
+    fieldType = serializers.CharField()
+    isRequired = serializers.BooleanField()
+    inputAttributes = serializers.DictField()
+    helper = serializers.ListField()
+    valueList = serializers.ListField()

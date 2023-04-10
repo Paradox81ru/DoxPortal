@@ -98,14 +98,14 @@ class Contact extends Component {
             fetch("/api/get-contact-form-data")
                 .then(response => response.json())
                 .then(data => {
-                    this.props.handleSetContactFormCache(data.dataForm)
+                    this.props.handleSetContactFormCache(data)
                 });
         }
     }
 
     componentDidMount() {
         // Устанавливает стили для страницы
-        this.props.setStyle(["/common/form"]);
+        this.props.setStyle(["common/css/form"]);
         this.setDataForm()
     }
 
