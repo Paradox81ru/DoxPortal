@@ -35,13 +35,14 @@ class MainMenuSerializer(serializers.Serializer):
 
 # noinspection PyAbstractClass
 class ContactSerializer(serializers.Serializer):
-    """ Сериализатор формы обоатной связи """
+    """ Сериализатор формы обратной связи """
     username = serializers.CharField(max_length=100, required=True)
     email = serializers.EmailField(required=True,
                                    error_messages={'required': 'Не заполнен адрес электронной почты',
                                                    'invalid': 'Неправильный адрес электронной почты.'})
     subject = serializers.CharField(max_length=150, required=True)
     message = serializers.CharField()
+    verifyCaptcha = serializers.CharField(required=True)
 
     @classproperty
     def field_meta_data(self):
@@ -53,9 +54,9 @@ class ContactSerializer(serializers.Serializer):
             FormFieldMetaData("email", "id_email", "Электронная почта", dox_enumes.TYPE_EMAIL, True),
             FormFieldMetaData("subject", "id_subject", "Тема", dox_enumes.TYPE_TEXT, True),
             FormFieldMetaData("message", "id_message", "Сообщение", dox_enumes.TYPE_TEXTAREA, True,
-                              {"cols": "50", "rows": "6"})
-            # FormFieldMetaData("verifyCaptcha", "idVerifyCaptcha", "Введите код с картинки", dox_enumes.TYPE_TEXT, True,
-            #                   {"autoComplete": "off"}),
+                              {"cols": "50", "rows": "6"}),
+            FormFieldMetaData("verifyCaptcha", "idVerifyCaptcha", "Введите код с картинки", dox_enumes.TYPE_TEXT, True,
+                              {"autoComplete": "off", "maxLength": "5"}),
         ]
 
     def send_email(self):

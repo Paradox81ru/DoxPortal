@@ -66,7 +66,7 @@ class Captcha:
     @classmethod
     def _font_path(cls):
         """ Возвращает папку со шрифтами"""
-        return os.path.join(settings.BASE_DIR, r'common/helpers/two/dox_captcha/fonts')
+        return os.path.join(settings.BASE_DIR, r'common/helpers/big/dox_captcha/fonts')
 
     # Не используется
     def _draw_trash_letters(self, img_drw):

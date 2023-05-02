@@ -60,7 +60,7 @@ class ContactView(APIView):
     def post(self, request):
         serializer = ContactSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.send_email()
+            # serializer.send_email()
             return Response('{"success": "Ok}')
         else:
             error_data = {"error": "FieldValidateError", "data": serializer.errors}
