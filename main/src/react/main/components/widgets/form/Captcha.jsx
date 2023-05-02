@@ -4,7 +4,7 @@ export default class Captcha extends Component{
     constructor() {
         super();
         this.state = {
-            captchaSrc: "/captcha1.png"
+            captchaSrc: "captcha1.png"
         }
     }
 
@@ -18,7 +18,7 @@ export default class Captcha extends Component{
     reloadCaptcha() {
         let rnd = Math.floor(Math.random()*9999.9999);
         this.setState({
-            captchaSrc: `/captcha${rnd}.png`
+            captchaSrc: `captcha${rnd}.png`
         })
     }
 
@@ -28,7 +28,7 @@ export default class Captcha extends Component{
                 <tbody>
                 <tr>
                     <td>
-                        <img id="captcha" src={this.state.captchaSrc} alt="captcha" />
+                        <img id="captcha" src={'main/' + this.state.captchaSrc} alt="captcha" />
                     </td>
                 </tr>
                 <tr>

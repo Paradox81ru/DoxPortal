@@ -35,7 +35,7 @@ class MainMenuSerializer(serializers.Serializer):
 
 # noinspection PyAbstractClass
 class ContactSerializer(serializers.Serializer):
-    """ Сериализатор формы обоатной связи """
+    """ Сериализатор формы обратной связи """
     username = serializers.CharField(max_length=100, required=True)
     email = serializers.EmailField(required=True,
                                    error_messages={'required': 'Не заполнен адрес электронной почты',
