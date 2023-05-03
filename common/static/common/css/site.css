@@ -5,7 +5,7 @@ html {
 
 @font-face {
   font-family: 'Isabella-Decor';
-  src: url(../../common/fonts/Isabella-Decor.ttf);
+  src: url(../fonts/Isabella-Decor.ttf);
 }
 div.tooltip ul {
   padding-left: 9px;

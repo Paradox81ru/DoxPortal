@@ -240,7 +240,10 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-APPEND_SLASH=False
+APPEND_SLASH = False
+
+# Время в минутах до сброса количества неудачных заходов.
+WAIT_RESET_FAILED_VALIDATE = 30
 
 try:
     from DoxPortal.local_settings import *

@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AACE,gBAAY;EACV,gBAAgB,EAAE,MAAM",
+"sources": ["../styles/Header1.scss"],
+"names": [],
+"file": "Header1.css"
+}

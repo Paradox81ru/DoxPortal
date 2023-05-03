@@ -1,6 +1,10 @@
+from typing import Final
+
 from django.urls import reverse
 from rest_framework.views import exception_handler
+from rest_framework.request import HttpRequest
 
+import hashlib
 
 def custom_exception_handler(exc, context):
     """ Собственный обработчик исключений """
@@ -113,3 +117,39 @@ def _convert_dict_choices_to_list(choices):
             value = item
         list_choices.append((key, value))
     return list_choices
+
+
+def get_request_ip(request: HttpRequest):
+    """ Возвращает IP адрес клиента """
+    ip_headers: Final = [
+            "X-Forwarded-For",
+            "Proxy-Client-IP",
+            "WL-Proxy-Client-IP",
+            "HTTP_X_FORWARDED_FOR",
+            "HTTP_X_FORWARDED",
+            "HTTP_X_CLUSTER_CLIENT_IP",
+            "HTTP_CLIENT_IP",
+            "HTTP_FORWARDED_FOR",
+            "HTTP_FORWARDED",
+            "HTTP_VIA",
+            "REMOTE_ADDR"
+    ]
+    # you can add more matching headers here...
+    for header in ip_headers:
+        if header not in request.headers:
+            continue
+        value: str = request.headers.get(header)
+        parts = value.split(",")
+        return parts[0]
+    return request.META.get("REMOTE_ADDR")
+
+
+def get_unique_hash_page(request: HttpRequest) -> str:
+    """ Возвращает уникальный HASH страницы (для страницы логина всегда будет 1) """
+    url: str = request.headers.get("Referer") if "Referer" in request.headers else "unknown"
+    if url.endswith("/login"):
+        return 1
+    ip_address: str = get_request_ip(request)
+    user_agent: str = request.headers.get("User-Agent") if "User-Agent" in request.headers else "unknown"
+    combined_string = ip_address + user_agent + url
+    return hashlib.md5(combined_string.encode('utf-8')).hexdigest()
