@@ -11,7 +11,7 @@ from accounts.models import User
 from common.serializers import FormFieldMetaDataSerializer
 from main.serializers import ContactSerializer
 from common.serializers import BeginDataSerializer
-
+from common.helpers.big.dox_captcha.captcha import Captcha
 
 @api_view(['GET'])
 def get_begin_data(request):
@@ -60,8 +60,11 @@ class ContactView(APIView):
     def post(self, request):
         serializer = ContactSerializer(data=request.data)
         if serializer.is_valid():
+            if not Captcha().validate_captcha_request(serializer.data.get("verifyCaptcha"), request):
+                error_data = {"error": "VerifyCaptchaError", "data": {"verifyCaptcha": ["Неверный код"]}}
+                return Response(error_data)
             # serializer.send_email()
-            return Response('{"success": "Ok}')
+            return Response({"success": "Ok"})
         else:
             error_data = {"error": "FieldValidateError", "data": serializer.errors}
             return Response(error_data)

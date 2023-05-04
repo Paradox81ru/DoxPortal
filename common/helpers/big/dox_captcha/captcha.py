@@ -1,18 +1,22 @@
 import os
 import random
 from PIL import Image, ImageDraw, ImageFont, ImageChops, ImageColor, ImageFilter
+from common.helpers.big.dox_captcha.captcha_redis_repository import CaptchaRedisRepository
+from common.helpers.small.dox_utils import get_unique_hash_page
+from rest_framework.request import HttpRequest
+from django.http.response import HttpResponse
+
 
 from django.conf import settings
 
 
 class Captcha:
-    def __init__(self, destination,
+    def __init__(self,
                  trash_range=15,
                  code_range=5,
                  offset=50,
                  font_size=40,
                  base_size=(250, 50)):
-        self._destination = destination
         self._trash_range = trash_range
         self._code_range = code_range
         self._offset = offset
@@ -20,6 +24,7 @@ class Captcha:
         self._base_size = base_size
         self._letters = self._letters()
         self._font_path = self._font_path()
+        self.captcha_repository = CaptchaRedisRepository()
 
     @classmethod
     def _random_fill(cls, red=255, green=255, blue=255):
@@ -117,7 +122,7 @@ class Captcha:
             img_drw.text((x, 0), c, 'black', font=self._random_font(self._font_path, main=self._font_size))
             x += offset
 
-    def captcha(self):
+    def _captcha(self, destination):
         # Если установлен режим отладки и отключена капча,
         if settings.DEBUG and settings.NO_CAPTCHA:
             # то сделаем капчу равной "12345".
@@ -133,10 +138,23 @@ class Captcha:
         self._draw_code_img(img_drw, code)
 
         # Сохраняем изображение
-        img.save(self._destination, 'PNG')
+        img.save(destination, 'PNG')
         img.close()
         # И возвращаем строку
         return ''.join(code)
 
-    def __call__(self, *args, **kwargs):
-        return self.captcha()
+    def set_captcha(self, destination: HttpResponse, request: HttpRequest):
+        """ Устанавливает каптчу """
+        unique_id = get_unique_hash_page(request)
+        captcha = self._captcha(destination)
+        self.captcha_repository.add_captcha(captcha, unique_id)
+
+    def validate_captcha_request(self, text: str, request: HttpRequest):
+        """ Проверяет текст каптчи из запроса """
+        unique_id = get_unique_hash_page(request)
+        return self.validate_captcha_unique_id(text, unique_id)
+
+    def validate_captcha_unique_id(self, text: str, unique_id: str):
+        """ Проверяет текст каптчи по ХЭШ-сумме url """
+        text_captcha = self.captcha_repository.get_text(unique_id)
+        return text_captcha is not None and text_captcha == text
