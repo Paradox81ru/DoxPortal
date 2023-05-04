@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 
 from common.helpers.big.dox_captcha.captcha import Captcha
+from common.helpers.big.dox_captcha.captcha_service import CaptchaService
 
 
 def main(request):
@@ -16,8 +17,5 @@ def main_path(request, path):
 def captcha_v(request, rand=None):
     if request.method == 'GET':
         response = HttpResponse(content_type="image/png")
-        if request.session.get('captcha', None):
-            del request.session['captcha']
-        captcha = Captcha(response)
-        request.session['captcha'] = captcha()
+        CaptchaService().set_captcha(response, request)
         return response

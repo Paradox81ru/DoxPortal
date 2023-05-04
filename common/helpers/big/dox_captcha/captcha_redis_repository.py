@@ -12,7 +12,7 @@ CaptchaRecord = namedtuple("CaptchaRecord", ["text", "elapsed_time"])
 
 # Количества неудачных попыток проверок каптч
 # [counter: счётчик неудачных попыток, elapsedTime: дата-время окончания действия счётчика неудачных попыток]
-FailureCounterCaptchaRecord = namedtuple("FailureCounterCaptchaRecord", ["counter", "elapsedTime"])
+FailureCounterCaptchaRecord = namedtuple("FailureCounterCaptchaRecord", ["counter", "elapsed_time"])
 
 
 class CaptchaRedisRepository:
@@ -60,33 +60,34 @@ class CaptchaRedisRepository:
         if redis.hexists(self.DOX_FAILURE_COUNTER_CAPTCHA_KEY, unique_id):
             # то берём структуру неудачных попыток,
             failure_counter_captcha_record: FailureCounterCaptchaRecord \
-                = redis.hget(self.DOX_FAILURE_COUNTER_CAPTCHA_KEY, unique_id)
+                = pickle.loads(redis.hget(self.DOX_FAILURE_COUNTER_CAPTCHA_KEY, unique_id))
             # и проверяем, если время жизни количества попыток уже истекло,
-            if self.is_time_expired(failure_counter_captcha_record.elapsedTime):
+            if self.is_time_expired(failure_counter_captcha_record.elapsed_time):
                 # то заново устанавливаем неудачную попытку проверки каптчи.
                 self.add_failure_validate_captcha_attempt(unique_id)
             else:
                 # А если ещё не истекло, то увеличиваем счётчик количества неудачных попыток.
                 redis.hset(self.DOX_FAILURE_COUNTER_CAPTCHA_KEY, unique_id,
-                           FailureCounterCaptchaRecord(failure_counter_captcha_record.counter + 1, self.get_captcha_lifetime()))
+                           pickle.dumps(FailureCounterCaptchaRecord(
+                               failure_counter_captcha_record.counter + 1, self.get_captcha_lifetime())))
         else:
             #  Если неудачных попыток ввода каптчи еще не было, то добавляю новую попытку.
             self.add_failure_validate_captcha_attempt(unique_id)
 
-    def  get_failure_validate_value(self, unique_id: str):
+    def get_failure_validate_value(self, unique_id: str) -> int:
         """ Возвращает количество неудачных попыток ввода каптч """
         return pickle.loads(redis.hget(self.DOX_FAILURE_COUNTER_CAPTCHA_KEY, unique_id)).counter \
             if redis.hexists(self.DOX_FAILURE_COUNTER_CAPTCHA_KEY, unique_id) else 0
 
-    def get_captcha_elapsed_time(self, unique_id: str):
+    def get_captcha_elapsed_time(self, unique_id: str) -> datetime:
         """ Возвращает время окончания действия каптчи """
         return pickle.loads(redis.hget(self.DOX_CAPTCHA_KEY, unique_id)).elapsed_time \
             if redis.hexists(self.DOX_CAPTCHA_KEY, unique_id) else None
 
-    def get_captcha_counter_elapsed_time(self, unique_id: str):
+    def get_captcha_counter_elapsed_time(self, unique_id: str) -> datetime:
         """ Возвращает время окончания действия счётчика неудачных попыток проверки каптчи """
         return pickle.loads(redis.hget(self.DOX_FAILURE_COUNTER_CAPTCHA_KEY, unique_id)).elapsed_time \
-            if redis.hexists(self.DOX_CAPTCHA_KEY, unique_id) else None
+            if redis.hexists(self.DOX_FAILURE_COUNTER_CAPTCHA_KEY, unique_id) else None
 
     def remove_captcha_repository(self):
         """ Удаляет репозитории каптчи """
@@ -115,8 +116,9 @@ class CaptchaRedisRepository:
             self.DOX_FAILURE_COUNTER_CAPTCHA_KEY, unique_id,
             pickle.dumps(FailureCounterCaptchaRecord(1, self.get_captcha_lifetime())))
 
-    def get_captcha_lifetime(self) -> datetime:
-        """ Возвраащет время жизни каптчи """
+    @classmethod
+    def get_captcha_lifetime(cls) -> datetime:
+        """ Возвращает время жизни каптчи """
         wait_reset_failed_validate: Final = getattr(settings, "WAIT_RESET_FAILED_VALIDATE", 30)
         # Вычисляем время жизни счётчика неудачных попыток каптчи.
         return datetime.now() + timedelta(minutes=wait_reset_failed_validate)

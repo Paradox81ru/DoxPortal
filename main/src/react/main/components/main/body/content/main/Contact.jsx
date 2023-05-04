@@ -80,7 +80,7 @@ class Contact extends Component {
                     this.captchaRef.current.reloadCaptcha();
                 } else if (response.hasOwnProperty("error")) {
                     removeAllFieldsErrors(this);
-                    if (response["error"] === "FieldValidateError") {
+                    if (response["error"] === "FieldValidateError" || response["error"] === "VerifyCaptchaError") {
                         setFieldsError(response["data"], this);
                     } else if (response["error"] === "SendEmailError") {
                         this.props.handleAddSystemMessage("danger", response["message"]);

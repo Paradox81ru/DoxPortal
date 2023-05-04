@@ -148,7 +148,7 @@ def get_unique_hash_page(request: HttpRequest) -> str:
     """ Возвращает уникальный HASH страницы (для страницы логина всегда будет 1) """
     url: str = request.headers.get("Referer") if "Referer" in request.headers else "unknown"
     if url.endswith("/login"):
-        return 1
+        return '1'
     ip_address: str = get_request_ip(request)
     user_agent: str = request.headers.get("User-Agent") if "User-Agent" in request.headers else "unknown"
     combined_string = ip_address + user_agent + url

@@ -1,18 +1,18 @@
 import os
 import random
-from PIL import Image, ImageDraw, ImageFont, ImageChops, ImageColor, ImageFilter
 
+from PIL import Image, ImageDraw, ImageFont, ImageColor
 from django.conf import settings
 
 
 class Captcha:
-    def __init__(self, destination,
+    """ Каптча """
+    def __init__(self,
                  trash_range=15,
                  code_range=5,
                  offset=50,
                  font_size=40,
                  base_size=(250, 50)):
-        self._destination = destination
         self._trash_range = trash_range
         self._code_range = code_range
         self._offset = offset
@@ -117,7 +117,7 @@ class Captcha:
             img_drw.text((x, 0), c, 'black', font=self._random_font(self._font_path, main=self._font_size))
             x += offset
 
-    def captcha(self):
+    def captcha(self, destination):
         # Если установлен режим отладки и отключена капча,
         if settings.DEBUG and settings.NO_CAPTCHA:
             # то сделаем капчу равной "12345".
@@ -133,10 +133,9 @@ class Captcha:
         self._draw_code_img(img_drw, code)
 
         # Сохраняем изображение
-        img.save(self._destination, 'PNG')
+        img.save(destination, 'PNG')
         img.close()
         # И возвращаем строку
         return ''.join(code)
 
-    def __call__(self, *args, **kwargs):
-        return self.captcha()
+
