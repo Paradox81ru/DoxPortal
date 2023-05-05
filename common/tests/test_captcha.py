@@ -2,11 +2,14 @@ from datetime import datetime
 
 from common.helpers.big.dox_captcha.captcha_redis_repository import \
     CaptchaRedisRepository, FailureCounterCaptchaRecord, CaptchaRecord
+from common.helpers.big.dox_captcha.captcha_service import CaptchaService
 from common.helpers.small.dox_redis import redis
 from common.helpers.small.dox_utils import get_unique_hash_page
 
+import os
 
-def test_captcha(fake_http_request):
+
+def test_captcha_redis_repository(fake_http_request):
     """ Тестирует добавление каптчи """
     hash_url = get_unique_hash_page(fake_http_request)
     captcha_redis_repository = CaptchaRedisRepository()
@@ -55,5 +58,52 @@ def test_failure_validate(fake_http_request):
     assert isinstance(captcha_redis_repository.get_failure_counter_captcha(hash_url), FailureCounterCaptchaRecord)
 
 
-def teardown_module(module):
+def test_set_captcha(destination_file, fake_http_request, patched_constant_debug, patched_constant_test_captcha):
+    hash_url = get_unique_hash_page(fake_http_request)
+    captcha_redis_repository = CaptchaRedisRepository()
+    # Проверяю, что CaptchaService - синглтон.
+    captcha_service = CaptchaService()
+    captcha_service_1 = CaptchaService()
+    assert captcha_service == captcha_service_1
+
+    # Проверяем наличие файла, и то что он еще пустой.
+    assert os.path.exists(destination_file)
+    assert os.path.getsize(destination_file) == 0
+    # Проверяем что каптчи еще нет,
+    assert captcha_redis_repository.get_text(hash_url) is None
+    captcha_service.set_captcha(destination_file, fake_http_request)
+    assert not captcha_service.validate_captcha_request("12346", fake_http_request)
+    # а после добавления уже есть,
+    assert captcha_service.validate_captcha_request("12345", fake_http_request)
+    # и файл уже не пустой.
+    assert os.path.getsize(destination_file) > 0
+
+
+def test_is_show_captcha(destination_file, fake_http_request, patched_constant_debug, patched_constant_test_captcha):
+    """ Проверяет, должна ли отображаться каптча """
+    hash_url = get_unique_hash_page(fake_http_request)
+    captcha_service = CaptchaService()
+    # Пока каптча не установлена, она отображаться и не должна.
+    assert not captcha_service.is_show_captcha(hash_url)
+    # Устанавливаю каптчу
+    captcha_service.set_captcha(destination_file, fake_http_request)
+    # и устанавливаю недачную попытку.
+    captcha_service.add_failure_validate(fake_http_request)
+    # С первой неудачной попытка она отображаться не должна.
+    assert not captcha_service.is_show_captcha(hash_url)
+    # Со второй тоже.
+    captcha_service.add_failure_validate(fake_http_request)
+    assert not captcha_service.is_show_captcha(hash_url)
+    # С третье тоже.
+    captcha_service.add_failure_validate(fake_http_request)
+    assert not captcha_service.is_show_captcha(hash_url)
+    # А вот теперь должна отобразиться.
+    captcha_service.add_failure_validate(fake_http_request)
+    assert captcha_service.is_show_captcha(hash_url)
+
+
+def teardown_function():
     CaptchaRedisRepository().remove_captcha_repository()
+
+# def teardown_module(module):
+#     CaptchaRedisRepository().remove_captcha_repository()

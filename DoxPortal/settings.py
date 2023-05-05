@@ -45,7 +45,7 @@ SECRET_KEY = 'django-insecure-(f7z8oji6k_(_v6n8hl7pjop(blk7)(@9)0b92l$jn&9&(1&rn
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-NO_CAPTCHA = False
+TEST_CAPTCHA = False
 
 ALLOWED_HOSTS = []
 INTERNAL_IPS = ['127.0.0.1']

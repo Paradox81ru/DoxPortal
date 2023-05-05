@@ -119,7 +119,7 @@ class Captcha:
 
     def captcha(self, destination):
         # Если установлен режим отладки и отключена капча,
-        if settings.DEBUG and settings.NO_CAPTCHA:
+        if settings.DEBUG and settings.TEST_CAPTCHA:
             # то сделаем капчу равной "12345".
             code = list('12345')
         else:

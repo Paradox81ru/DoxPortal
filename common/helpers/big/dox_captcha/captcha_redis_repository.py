@@ -99,7 +99,7 @@ class CaptchaRedisRepository:
     def get_failure_counter_captcha(self, unique_id: str) -> FailureCounterCaptchaRecord:
         """ Возвращает неудачные попытки проверки катчи по уникальному идентификатору """
         return pickle.loads(redis.hget(self.DOX_FAILURE_COUNTER_CAPTCHA_KEY, unique_id)) \
-            if redis.hexists(self.DOX_FAILURE_COUNTER_CAPTCHA_KEY, unique_id) else None
+            if redis.hexists(self.DOX_FAILURE_COUNTER_CAPTCHA_KEY, unique_id) else 0
 
     @classmethod
     def is_time_expired(cls, date_time: datetime) -> bool:
