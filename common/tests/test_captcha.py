@@ -72,9 +72,9 @@ def test_set_captcha(destination_file, fake_http_request, patched_constant_debug
     # Проверяем что каптчи еще нет,
     assert captcha_redis_repository.get_text(hash_url) is None
     captcha_service.set_captcha(destination_file, fake_http_request)
-    assert not captcha_service.validate_captcha_request("12346", fake_http_request)
+    assert not captcha_service.validate_captcha("12346", fake_http_request)
     # а после добавления уже есть,
-    assert captcha_service.validate_captcha_request("12345", fake_http_request)
+    assert captcha_service.validate_captcha("12345", fake_http_request)
     # и файл уже не пустой.
     assert os.path.getsize(destination_file) > 0
 
@@ -84,22 +84,22 @@ def test_is_show_captcha(destination_file, fake_http_request, patched_constant_d
     hash_url = get_unique_hash_page(fake_http_request)
     captcha_service = CaptchaService()
     # Пока каптча не установлена, она отображаться и не должна.
-    assert not captcha_service.is_show_captcha(hash_url)
+    assert not captcha_service.is_show_captcha_unique_id(hash_url)
     # Устанавливаю каптчу
     captcha_service.set_captcha(destination_file, fake_http_request)
     # и устанавливаю недачную попытку.
     captcha_service.add_failure_validate(fake_http_request)
-    # С первой неудачной попытка она отображаться не должна.
-    assert not captcha_service.is_show_captcha(hash_url)
+    # С первой неудачной попытки она отображаться не должна.
+    assert not captcha_service.is_show_captcha_unique_id(hash_url)
     # Со второй тоже.
     captcha_service.add_failure_validate(fake_http_request)
-    assert not captcha_service.is_show_captcha(hash_url)
+    assert not captcha_service.is_show_captcha_unique_id(hash_url)
     # С третье тоже.
     captcha_service.add_failure_validate(fake_http_request)
-    assert not captcha_service.is_show_captcha(hash_url)
+    assert not captcha_service.is_show_captcha_unique_id(hash_url)
     # А вот теперь должна отобразиться.
     captcha_service.add_failure_validate(fake_http_request)
-    assert captcha_service.is_show_captcha(hash_url)
+    assert captcha_service.is_show_captcha_unique_id(hash_url)
 
 
 def teardown_function():

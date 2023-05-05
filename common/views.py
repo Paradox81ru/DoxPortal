@@ -60,7 +60,7 @@ class ContactView(APIView):
     def post(self, request):
         serializer = ContactSerializer(data=request.data)
         if serializer.is_valid():
-            if not CaptchaService().validate_captcha_request(serializer.data.get("verifyCaptcha"), request):
+            if not CaptchaService().validate_captcha(serializer.validated_data["verifyCaptcha"], request):
                 error_data = {"error": "VerifyCaptchaError", "data": {"verifyCaptcha": ["Неверный код"]}}
                 return Response(error_data)
             # serializer.send_email()

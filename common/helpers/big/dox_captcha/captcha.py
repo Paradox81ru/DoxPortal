@@ -124,7 +124,7 @@ class Captcha:
             code = list('12345')
         else:
             # Иначе генерируем случайный набор символов из списка символов в пределах.
-            code = [random.choice(self._letters) for i in range(self._code_range)]
+            code = [random.choice(self._letters) for _ in range(self._code_range)]
 
         img = Image.new("RGBA", self._base_size, 'white')
         img_drw = ImageDraw.Draw(img)
@@ -137,5 +137,3 @@ class Captcha:
         img.close()
         # И возвращаем строку
         return ''.join(code)
-
-

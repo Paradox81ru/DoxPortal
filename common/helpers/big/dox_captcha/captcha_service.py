@@ -21,7 +21,7 @@ class CaptchaService(metaclass=MetaSingleton):
         captcha = Captcha().captcha(destination)
         self.captcha_repository.add_captcha(captcha, unique_id)
 
-    def validate_captcha_request(self, text: str, request: HttpRequest):
+    def validate_captcha(self, text: str, request: HttpRequest):
         """ Проверяет текст каптчи из запроса """
         unique_id = get_unique_hash_page(request)
         return self.validate_captcha_unique_id(text, unique_id)
@@ -31,7 +31,7 @@ class CaptchaService(metaclass=MetaSingleton):
         text_captcha = self.captcha_repository.get_text(unique_id)
         return text_captcha is not None and text_captcha == text
 
-    def remove_captcha_request(self, request: HttpRequest):
+    def remove_captcha(self, request: HttpRequest):
         """ Удаляет каптчу по запросу """
         unique_id = get_unique_hash_page(request)
         self.remove_captcha_unique_id(unique_id)
@@ -45,8 +45,13 @@ class CaptchaService(metaclass=MetaSingleton):
         unique_id = get_unique_hash_page(request)
         self.captcha_repository.add_failure_validate(unique_id)
 
-    def is_show_captcha(self, unique_id):
-        """ Нужно ли отображать каптчу """
+    def is_show_captcha(self, request: HttpRequest):
+        """ Нужно ли отображать каптчу по запросу """
+        unique_id = get_unique_hash_page(request)
+        return self.is_show_captcha_unique_id(unique_id)
+
+    def is_show_captcha_unique_id(self, unique_id):
+        """ Нужно ли отображать каптчу по ХЭШ-сумме url """
         number_failed_validate = getattr(settings, "NUMBER_FAILED_VALIDATE", 3)
         # Если количество неудачных входов больше указанных,
         if self.captcha_repository.get_failure_validate_value(unique_id) > number_failed_validate:

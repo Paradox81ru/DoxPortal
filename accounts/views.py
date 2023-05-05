@@ -20,6 +20,8 @@ from common.permissions import OnlyAdminPermission
 from common.serializers import LoginSerializer
 from accounts.models import User
 from main.models import get_main_menu_list
+from common.helpers.big.dox_captcha.captcha_service import CaptchaService
+from common.helpers.big.dox_auth_token_serializer import DoxAuthTokenSerializer
 from .serializers import UserDataSerializer
 
 # class LoginView(KnoxLoginView):
@@ -46,7 +48,7 @@ class LoginView(KnoxLoginView):
         return token
 
     def post(self, request, format=None):
-        serializer = AuthTokenSerializer(data=request.data)
+        serializer = DoxAuthTokenSerializer(data=request.data, context={"request": request})
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         login(request, user)
