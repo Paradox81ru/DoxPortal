@@ -8,7 +8,7 @@ from rest_framework.decorators import api_view, permission_classes
 
 from main.models import Paradox, get_breadcrumb_list, get_main_menu_list, get_main_menu
 from accounts.models import User
-from common.serializers import FormFieldMetaDataSerializer
+from common.serializers import FormFieldMetaDataSerializer, RegisterUserSerializer
 from main.serializers import ContactSerializer
 from common.serializers import BeginDataSerializer
 from common.helpers.big.dox_captcha.captcha_service import CaptchaService
@@ -26,7 +26,7 @@ def get_begin_data(request):
         'mainMenu': get_main_menu_list(user),
         'currentYear': timezone.now().year,
         'siteDomainName': request.get_host(),
-        'isShowCaptcha': False
+        'isShowCaptcha': CaptchaService().is_show_captcha(request)
     })
     return Response(begin_data_serializer.data)
 
@@ -42,8 +42,17 @@ def get_login_form_data(request):
 @api_view(["GET"])
 @permission_classes([permissions.AllowAny])
 def get_contact_form_data(request):
+    """ Возвращает данные для формы обратной связи """
     contact_form_field_meta_data_serializer = FormFieldMetaDataSerializer(ContactSerializer.field_meta_data, many=True)
     return Response(contact_form_field_meta_data_serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def get_register_form_data(request):
+    """ Возвращает данные для формы регистрации новго пользователя """
+    register_form_field_meta_data_serializer = FormFieldMetaDataSerializer(RegisterUserSerializer.field_meta_data, many=True)
+    return Response(register_form_field_meta_data_serializer.data)
 
 
 class AboutPageView(APIView):
@@ -61,10 +70,10 @@ class ContactView(APIView):
         serializer = ContactSerializer(data=request.data)
         if serializer.is_valid():
             if not CaptchaService().validate_captcha(serializer.validated_data["verifyCaptcha"], request):
-                error_data = {"error": "VerifyCaptchaError", "data": {"verifyCaptcha": ["Неверный код"]}}
+                error_data = {"error": "VerifyCaptchaError",  "fields_error": {"verifyCaptcha": ["Неверный код"]}}
                 return Response(error_data)
             # serializer.send_email()
             return Response({"success": "Ok"})
         else:
-            error_data = {"error": "FieldValidateError", "data": serializer.errors}
+            error_data = {"error": "FieldValidateError", "fields_error": serializer.errors}
             return Response(error_data)

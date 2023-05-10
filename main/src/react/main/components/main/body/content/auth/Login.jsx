@@ -12,7 +12,7 @@ import {saveToken, isRememberMiToWhereRememberToken} from "../../../../../lib/au
 import {
     handleSimpleFieldValueChange,
     removeAllFieldsErrors,
-    setFieldError,
+    setFieldsError,
     setNonFieldError
 } from "../../../../../lib/FormUtils";
 import {UnauthorizedError} from "../../../../../lib/errors";
@@ -67,15 +67,17 @@ class Login extends Component {
                 removeAllFieldsErrors(this);
                 if (data.hasOwnProperty("error")) {
                     // Если ошибка валидации полей формы, и установлена ошибка вне поля,
-                    if (data["error"] === "ValidationError" && data.hasOwnProperty("non_field_errors") ) {
+                    if (data["error"] === "ValidationError" ) {
                         // то показываю ошибку.
-                        setNonFieldError(data["non_field_errors"], this);
+                        // setNonFieldError(data["non_field_errors"], this);
+                        setFieldsError(data["fields_error"], this)
                         // и если надо, отображаю каптчу.
                         this.props.setShowCaptcha(data["isShowCaptcha"]);
-                    } else if (data["error"] === "CaptchaInvalid") {
-                        setFieldError("verifyCaptcha", data["message"], this);
-                        this.props.setShowCaptcha(true);
                     }
+                    // else if (data["error"] === "CaptchaInvalid") {
+                    //     setFieldError("verifyCaptcha", data["message"], this);
+                    //     this.props.setShowCaptcha(true);
+                    // }
                 } else {
                     this.props.setShowCaptcha(false);
                     this.setDataLogin(data);

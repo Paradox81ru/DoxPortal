@@ -81,7 +81,7 @@ class Contact extends Component {
                 } else if (response.hasOwnProperty("error")) {
                     removeAllFieldsErrors(this);
                     if (response["error"] === "FieldValidateError" || response["error"] === "VerifyCaptchaError") {
-                        setFieldsError(response["data"], this);
+                        setFieldsError(response["fields_error"], this);
                     } else if (response["error"] === "SendEmailError") {
                         this.props.handleAddSystemMessage("danger", response["message"]);
                         // setNonFieldError(response["message"], this);

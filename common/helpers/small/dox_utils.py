@@ -1,25 +1,12 @@
 from typing import Final
 
 from django.urls import reverse
+from rest_framework.exceptions import ValidationError, ErrorDetail
 from rest_framework.views import exception_handler
 from rest_framework.request import HttpRequest
 
 import hashlib
 
-def custom_exception_handler(exc, context):
-    """ Собственный обработчик исключений """
-    # Сначала вызовите обработчик исключений REST framework по умолчанию,
-    # чтобы получить стандартный ответ об ошибке.
-    response = exception_handler(exc, context)
-
-    # Теперь добавьте код состояния HTTP в ответ.
-    if response is not None:
-        response.data['status_cose'] = response.status_code
-        response.data['error'] = exc.__class__.__name__
-    # if exc.__class__.__name__ == 'AuthenticationFailed':
-    #     response.data['login_data'] = get_login_data(None, '')
-
-    return response
 
 
 def reverse_params(view_name, args=None, kwargs=None, params=None, anchor=None):

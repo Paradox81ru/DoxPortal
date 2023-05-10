@@ -18,6 +18,7 @@ import Logout_W from "./main/body/content/Auth/Logout";
 import About_W from "./main/body/content/main/About";
 import Copyright from "./main/body/content/main/Copyright";
 import Contact_W from "./main/body/content/main/Contact";
+import Register_W from "./main/body/content/Auth/Register";
 import AllUsers from "./main/body/content/test/AllUsers";
 import {getFetchHeaders, resolveBeginData} from "../lib/send_request_util";
 import {changeMainMenu, changeUserAuthentication} from "../store/actions/generalActions";
@@ -167,7 +168,7 @@ export default class App extends Component{
                             <Route path="/contact" element={
                                 <Contact_W setStyle={this.setListStyles} clearStyle={this.clearListStyles} />
                             } />
-                            <Route path="/signup" element={<p>Регистрация</p>} />
+                            <Route path="/signup" element={<Register_W setStyle={this.setListStyles} clearStyle={this.clearListStyles} />} />
                             <Route path="/get-all-users" element={<AllUsers />} />
                             <Route path="*" element="Not found" />
                         </Route>

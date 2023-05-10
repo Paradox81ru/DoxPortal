@@ -49,8 +49,10 @@ class ContactSerializer(serializers.Serializer):
         return [
             FormFieldMetaData("username", "id_username", "Логин", dox_enumes.TYPE_TEXT, True,
                               {"maxLength": "100", "minLength": "3"},
-                              ("Логин должен быть правильным", "Логин не должен быть пустым",
-                               "Логин не должен повторяться")),
+                              ("Логин должен состоять только из букв латинского алфавита, цифр, подчеркивания и дефиса.",
+                               "Логин должен содержать не менее 3 и не более 100 символов.",
+                               "Логин не может начинаться или завершаться с дефиса или подчеркивания, а так же запрещены любые комбинации подчеркивания и дефиса.",
+                               "Логин не должен быть похожим на логины 'admin', 'paradox' или 'system'.")),
             FormFieldMetaData("email", "id_email", "Электронная почта", dox_enumes.TYPE_EMAIL, True),
             FormFieldMetaData("subject", "id_subject", "Тема", dox_enumes.TYPE_TEXT, True),
             FormFieldMetaData("message", "id_message", "Сообщение", dox_enumes.TYPE_TEXTAREA, True,

@@ -123,7 +123,7 @@ WSGI_APPLICATION = 'DoxPortal.wsgi.application'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),
-    'EXCEPTION_HANDLER': 'common.helpers.small.dox_utils.custom_exception_handler',
+    'EXCEPTION_HANDLER': 'common.helpers.small.custom_exception_handler.custom_exception_handler',
     # 'NON_FIELD_ERRORS_KEY': "_",
 }
 
