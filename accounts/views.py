@@ -17,7 +17,7 @@ from django.http import JsonResponse
 from django.shortcuts import render
 
 from common.permissions import OnlyAdminPermission
-from common.serializers import LoginSerializer
+from accounts.serializers import LoginSerializer, RegisterUserSerializer
 from accounts.models import User
 from main.models import get_main_menu_list
 from common.helpers.big.dox_captcha.captcha_service import CaptchaService
@@ -59,6 +59,17 @@ class LoginView(KnoxLoginView):
             'mainMenu': get_main_menu_list(user),
         })
         return Response(login_serializer.data)
+
+
+class Signup(APIView):
+    """ Регистрация новой учётной записи """
+    def post(self, request):
+        serializer = RegisterUserSerializer(data=request.data)
+        if serializer.is_valid():
+            return Response({"success": "Ok"})
+        else:
+            error_data = {"error": "FieldValidateError", "fields_error": serializer.errors}
+            return Response(error_data)
 
 
 class GetAllUsers(APIView):

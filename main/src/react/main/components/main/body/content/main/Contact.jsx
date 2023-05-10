@@ -37,7 +37,7 @@ class Contact extends Component {
                 verifyCaptcha: ""
             },
             errors: {
-                _ : [],
+                non_field_errors : [],
                 username: [],
                 email: [],
                 subject: [],
@@ -130,9 +130,9 @@ class Contact extends Component {
                 <Row>
                     <Col lg={6}>
                         <Form onSubmit={this.handleSubmit}>
+                            {this.state.errors.non_field_errors.length > 0 && <NonFieldError errors={this.state.errors.non_field_errors}/>}
                             {formGroups}
                             <Captcha ref={this.captchaRef}/>
-                            {this.state.errors._.length > 0 && <NonFieldError errors={this.state.errors._}/>}
                             <Button variant="primary" type="submit" name="contact-button">Отправить</Button>
                         </Form>
                     </Col>

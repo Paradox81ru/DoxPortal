@@ -8,10 +8,12 @@ from rest_framework.decorators import api_view, permission_classes
 
 from main.models import Paradox, get_breadcrumb_list, get_main_menu_list, get_main_menu
 from accounts.models import User
-from common.serializers import FormFieldMetaDataSerializer, RegisterUserSerializer
+from common.serializers import FormFieldMetaDataSerializer
+from accounts.serializers import RegisterUserSerializer
 from main.serializers import ContactSerializer
 from common.serializers import BeginDataSerializer
 from common.helpers.big.dox_captcha.captcha_service import CaptchaService
+
 
 @api_view(['GET'])
 def get_begin_data(request):

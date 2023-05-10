@@ -36,7 +36,7 @@ class Register extends Component {
                 passwordConfirm: ""
             },
             errors: {
-                _ : [],
+                non_field_errors : [],
                 username: [],
                 email: [],
                 password: [],
@@ -77,7 +77,7 @@ class Register extends Component {
                     // Если это ошибка проверки полей,
                     if (response["error"] === "FieldValidateError") {
                         // то отображу ошибки около полей.
-                        setFieldsError(response["data"], this);
+                        setFieldsError(response["fields_error"], this);
                     } else if (response["error"] === "MessagingError") {
                         // А если это ошибка отправки сообщения по почте, то перенаправлю на страницу сообщения.
                         this.setRedirect(INVALID_REDIRECT);
@@ -143,8 +143,8 @@ class Register extends Component {
             <Row>
                 <Col lg={6}>
                     <Form onSubmit={this.handleSubmit}>
+                        {this.state.errors.non_field_errors.length > 0 && <NonFieldError errors={this.state.errors.non_field_errors}/>}
                         {formGroups}
-                        {this.state.errors._.length > 0 && <NonFieldError errors={this.state.errors._}/>}
                         <Button variant="primary" type="submit" name="signup-button">Зарегистрироваться</Button>
                     </Form>
                 </Col>
