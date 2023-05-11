@@ -1,6 +1,12 @@
+import os
+from email.mime.image import MIMEImage
 from typing import Final
 
+from django.conf import settings
+from django.core.mail import EmailMultiAlternatives
+from django.template import loader
 from django.urls import reverse
+from django.utils.html import strip_tags
 from rest_framework.exceptions import ValidationError, ErrorDetail
 from rest_framework.views import exception_handler
 from rest_framework.request import HttpRequest
@@ -140,3 +146,46 @@ def get_unique_hash_page(request: HttpRequest) -> str:
     user_agent: str = request.headers.get("User-Agent") if "User-Agent" in request.headers else "unknown"
     combined_string = ip_address + user_agent + url
     return hashlib.md5(combined_string.encode('utf-8')).hexdigest()
+
+
+def send_email_template(subject, to, template, context, request, from_email=None):
+    """
+    Отправляет сообщения по почте с использованием шаблона
+
+    :param subject: тема письма
+    :param str, list, tuple to: список адресов для кого
+    :param template: наименование шаблона
+    :param dict context: контекст для шаблона
+    :param request
+    :param str from_email: адрес от кого
+    :return:
+    """
+    from_email = from_email or settings.EMAIL_HOST_USER
+    # Если адрес почты кому отправить передали в виде строки,
+    if isinstance(to, str):
+        # то преобразуем его в список, т.к. именно список нужно передавать.
+        to = (to,)
+    # Возьмем шаблон,
+    template = loader.get_template(template)
+    # и добавив в него контекст сформируем строку шаблона.
+    html_msg = template.render(context, request)
+    # Создадим текстовый вариант HTML строки, удалив из него тэги.
+    txt_msg = strip_tags(html_msg)
+    # send_mail(subject, txt_msg, from_email, to, html_message=html_msg)
+
+    # Создадим новое письмо,
+    mail = EmailMultiAlternatives(subject, txt_msg, from_email, to)
+    # и добавим к нему HTML содержимое.
+    mail.attach_alternative(html_msg, 'text/html')
+    # Далее откроем файл-изображение логотипа сайта,
+    with open(os.path.join(settings.STATIC_ROOT, 'common/images/site/logo-head_200.jpg'), 'rb') as fp:
+        # и загрузим его в MIMEimage.
+        logo_image = MIMEImage(fp.read())
+        # Чтобы далее правильно отобразить загруженное изображение в HTML коде нужно добавить правильыне заголовки.
+        logo_image.add_header('Content-ID', '<logo-head.jpg>')
+        logo_image.add_header('Content-Disposition', 'inline', filename="logo-head.jpg")
+        mail.mixed_subtype = 'related'
+        # Внедрим изображение в почту.
+        mail.attach(logo_image)
+
+    return mail.send(fail_silently=False)

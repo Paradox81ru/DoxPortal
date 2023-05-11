@@ -18,7 +18,7 @@ from django.shortcuts import render
 
 from common.permissions import OnlyAdminPermission
 from accounts.serializers import LoginSerializer, RegisterUserSerializer
-from accounts.models import User
+from accounts.models import User, TempUser
 from main.models import get_main_menu_list
 from common.helpers.big.dox_captcha.captcha_service import CaptchaService
 from common.helpers.big.dox_auth_token_serializer import DoxAuthTokenSerializer
@@ -99,3 +99,18 @@ class GetUser(APIView):
         user = User.objects.get(username="User")
         serializer = UserDataSerializer(instance=user)
         return Response(serializer.data)
+
+
+def confirm_account(request, token):
+    """ Представление подтверждения аккаунта """
+    try:
+        user = TempUser.objects.get(pk=token)
+        user.import_temp_user_to_user()
+        user.delete()
+        return Response({"success": "Ok", "username": user.username})
+    # except TempUser.DoesNotExist:
+    #     error_data = {"error": "MessagingError", "username": user.username}
+    #     return Response(error_data)
+    except Exception:
+        error_data = {"error": "ConfirmError", 'message': 'Ошибка подтверждения аккаунта.'}
+        return Response(error_data)

@@ -74,7 +74,7 @@ class ContactView(APIView):
             if not CaptchaService().validate_captcha(serializer.validated_data["verifyCaptcha"], request):
                 error_data = {"error": "VerifyCaptchaError",  "fields_error": {"verifyCaptcha": ["Неверный код"]}}
                 return Response(error_data)
-            # serializer.send_email()
+            serializer.send_email()
             return Response({"success": "Ok"})
         else:
             error_data = {"error": "FieldValidateError", "fields_error": serializer.errors}

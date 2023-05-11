@@ -37,14 +37,9 @@ class RegisterUserSerializer(MixinSerializerValidateUsernameAndEmail, serializer
         password = attrs.get("password")
         password_confirm = attrs.get("passwordConfirm")
         if password and password_confirm and password_confirm != password:
-            raise serializers.ValidationError("Пароли не совпадают", code='password_mismatch')
+            raise serializers.ValidationError({"passwordConfirm": "Пароли не совпадают"}, code='password_mismatch')
 
         return attrs
-
-    # def validate_passwordConfirm(self, value):
-    #     password = value
-    #     password_confirm = self.validated_data["passwordConfirm"]
-    #     return value
 
     @classproperty
     def field_meta_data(self):

@@ -1,0 +1,6 @@
+{% extends 'base_email.html' %}
+{% block content %}
+    <h1>Подтверждение учетной записи </h1>
+    <p>Для подтверждения учетной записи <strong>{{ username }}</strong> пройдите по следующей ссылке:</p>
+    <a href="http://{{ link }}">{{ link }}</a>
+{% endblock %}

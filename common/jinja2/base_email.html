@@ -1,0 +1,80 @@
+{% import 'macros/resources.html' as resources %}
+{% set rnd_paradox = rnd_paradox() %}
+<!DOCTYPE html>
+<html lang="ru-RU">
+<head>
+    <meta charset="UTF-8">
+    <style type="text/css">
+        {#        body .wrap {
+            width: 800px;
+            margin: 0 10px;
+        } #}
+        .container {
+            max-width: 800px;
+            padding-right: 15px;
+            padding-left: 15px;
+            margin-right: auto;
+            margin-left: auto;
+        }
+        .row {
+            margin-right: -15px;
+            margin-left: -15px;
+        }
+
+        body .header .container {
+            background: teal;
+        }
+
+        body .header .paradox {
+            width: 600px;
+            color: orange;
+{#             font-family: "Comic Sans MS", sans-serif; #}
+            font-size: 18px;
+            font-weight: bold;
+            font-style: italic;
+            padding: 5px;
+            text-align: right;
+            text-shadow: 0 4px 3px rgba(0, 0, 0, 0.4), 0 8px 13px rgba(0, 0, 0, 0.1), 0 18px 23px rgba(0, 0, 0, 0.1);
+            margin-top: 10px;
+            float: right;
+        }
+
+        body .header .logo-image {
+            padding: 10px;
+        }
+
+    </style>
+    {% block style %}
+
+    {% endblock %}
+</head>
+<body>
+<div class="wrap">
+    <div class="header">
+        <div class="container">
+            <div class="paradox" title="{{ rnd_paradox['header'] }}">
+                {{ rnd_paradox['content'] }}
+            </div>
+            <div class="logo-image">
+                <a href="http://{{ request.get_host() }}">
+            {#         <img src="http://{{ request.get_host() }}{{ static('common/images/site/logo-head.jpg') }}" alt=""
+                         height="100"> #}
+                    <img src="cid:logo-head.jpg" alt="логотип" height="100">
+                </a>
+            </div>
+
+        </div>
+    </div>
+    <div class="body">
+        <div class="container">
+            <div class="row">
+                {% block content %}
+
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
