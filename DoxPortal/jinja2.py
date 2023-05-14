@@ -17,6 +17,7 @@ def environment(**options):
         'url': reverse,
         'url_params': reverse_params,
         'is_debug': lambda: settings.DEBUG,
+        'rnd_paradox': j_globals.HeaderParadox.rnd_paradox,
         'today_date': timezone.now(),
         'format_date': j_globals.format_date,
     })

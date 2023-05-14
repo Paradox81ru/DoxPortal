@@ -233,7 +233,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+STATIC_ROOT = '/var/www/paradox-portal/static'
+MEDIA_ROOT = '/var/www/paradox-portal/media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -244,6 +247,17 @@ APPEND_SLASH = False
 
 # Время в минутах до сброса количества неудачных заходов.
 WAIT_RESET_FAILED_VALIDATE = 30
+
+# Каталог с расположенными csv файлами GeoIP2
+# https://dev.maxmind.com/geoip/geoip2/geolite2/
+IMPORT_GEO_IP_FILES_DIR = "/var/pyprojects/GeoIP/GeoIP_import"
+BASE_GEOIP_FILES_DIR = "/var/pyprojects/GeoIP/GeoIP_base"
+# Файлы данных
+CITIES_LIST_FILENAME = "GeoLite2-City-Locations.csv"
+IPV4_CITIES_FILENAME = "GeoLite2-City-Blocks-IPv4.csv"
+IPV6_CITIES_FILENAME = "GeoLite2-City-Blocks-IPv6.csv"
+IPV4_ORGANIZATION_FILENAME = "GeoLite2-ASN-Blocks-IPv4.csv"
+IPV6_ORGANIZATION_FILENAME = "GeoLite2-ASN-Blocks-IPv6.csv"
 
 try:
     from DoxPortal.local_settings import *

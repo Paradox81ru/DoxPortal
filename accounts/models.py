@@ -6,6 +6,7 @@ import zoneinfo
 from typing import Final
 
 import unicodedata
+from django.conf import settings
 from django.urls import reverse
 from django.utils.functional import classproperty
 from django.contrib.auth.hashers import make_password
@@ -15,6 +16,7 @@ from django.utils import timezone
 from django.utils.crypto import get_random_string
 from django.utils.encoding import force_str
 
+from common.helpers.big.dox_ip_geolite2.dox_geoip import DoxGeoIp
 from common.helpers.small import dox_utils, dox_lib
 from common.helpers.small import dox_enumes
 
@@ -469,36 +471,36 @@ class TempUserManager(models.Manager):
         except Exception:
             return None
 
-    # @classmethod
-    # def request_confirm_account(cls, request, temp_user):
-    #     return cls._send_email(request, temp_user, 'email_confirm_account.html', 'confirm-account')
-    #
-    # @classmethod
-    # def request_new_password(cls, request, token):
-    #     # Для начала попробуем найти временного пользователя по указанному токену.
-    #     temp_user = TempUser.objects.get(token=token)
-    #     return cls._send_email(request, temp_user, 'email_request_new_password.html', 'confirm-reset-password')
+    @classmethod
+    def request_confirm_account(cls, request, temp_user):
+        return cls._send_email(request, temp_user, 'email_confirm_account.html', 'confirm-account')
 
-    # @classmethod
-    # def _send_email(cls, request, temp_user, template_name, site_name, ext_context=None):
-    #     """ Отправляет письмо по электронной почте """
-    #     subject = 'Сообщение с сайта "Парадокс-портал".'
-    #     url = request.get_host() + reverse(f'accounts:{site_name}', args=[temp_user.token])
-    #     context = {'username': temp_user.username, 'link': url}
-    #     if ext_context is not None:
-    #         context.update(ext_context)
-    #     return dox_utils.send_email_template(subject, temp_user.email, f'accounts/email/{template_name}', context, request)
+    @classmethod
+    def request_new_password(cls, request, token):
+        # Для начала попробуем найти временного пользователя по указанному токену.
+        temp_user = TempUser.objects.get(token=token)
+        return cls._send_email(request, temp_user, 'email_request_new_password.html', 'confirm-reset-password')
 
-    # @staticmethod
-    # def _get_timezone(ip_address):
-    #     geoip_base_dir = settings.BASE_GEOIP_FILES_DIR
-    #     geoip = DoxGeoIp(geoip_base_dir, 'ru')
-    #     # noinspection PyBroadException
-    #     try:
-    #         time_zone = geoip.get_timezone(ip_address)
-    #     except Exception:
-    #         time_zone = settings.TIME_ZONE
-    #     return time_zone
+    @classmethod
+    def _send_email(cls, request, temp_user, template_name, site_name, ext_context=None):
+        """ Отправляет письмо по электронной почте """
+        subject = 'Сообщение с сайта "Парадокс-портал".'
+        url = request.get_host() + reverse(f'accounts:{site_name}', args=[temp_user.token])
+        context = {'username': temp_user.username, 'link': url}
+        if ext_context is not None:
+            context.update(ext_context)
+        return dox_utils.send_email_template(subject, temp_user.email, f'accounts/email/{template_name}', context, request)
+
+    @staticmethod
+    def _get_timezone(ip_address):
+        geoip_base_dir = settings.BASE_GEOIP_FILES_DIR
+        geoip = DoxGeoIp(geoip_base_dir, 'ru')
+        # noinspection PyBroadException
+        try:
+            time_zone = geoip.get_timezone(ip_address)
+        except Exception:
+            time_zone = settings.TIME_ZONE
+        return time_zone
 
 
 class TempUser(models.Model):
@@ -577,25 +579,12 @@ class TempUser(models.Model):
         data_now = datetime.datetime.now().date()
         return (data_now - self.date_joined.date()).days < TempUser.NUMBER_DAYS_TO_DELAY
 
-    @classmethod
-    def request_confirm_account(cls, request, temp_user):
-        return cls._send_email(request, temp_user, 'email_confirm_account.html', 'confirm-account')
-
-    @classmethod
-    def request_new_password(cls, request, token):
-        # Для начала попробуем найти временного пользователя по указанному токену.
-        temp_user = TempUser.objects.get(token=token)
-        return cls._send_email(request, temp_user, 'email_request_new_password.html', 'confirm-reset-password')
-
-    @classmethod
-    def _send_email(cls, request, temp_user, template_name, site_name, ext_context=None):
-        """ Отправляет письмо по электронной почте """
+    def _send_email(self, request, template_name, site_name):
+        """ Отправляет повторное письмо по электронной почте """
         subject = 'Сообщение с сайта "Парадокс-портал".'
-        url = request.get_host() + reverse(f'accounts:{site_name}', args=[temp_user.token])
-        context = {'username': temp_user.username, 'link': url}
-        if ext_context is not None:
-            context.update(ext_context)
-        return dox_utils.send_email_template(subject, temp_user.email, f'accounts/email/{template_name}', context, request)
+        url = request.get_host() + reverse(f'accounts:{site_name}', args=[self.token])
+        context = {'username': self.username, 'link': url}
+        return dox_utils.send_email_template(subject, self.email, f'accounts/email/{template_name}', context, request)
 
     def __str__(self):
         return f'{self.username} {self.LIST_PROCESS[self.process]}'

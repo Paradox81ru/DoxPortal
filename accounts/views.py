@@ -21,6 +21,7 @@ from accounts.serializers import LoginSerializer, RegisterUserSerializer
 from accounts.models import User, TempUser
 from main.models import get_main_menu_list
 from common.helpers.big.dox_captcha.captcha_service import CaptchaService
+from common.helpers.small.dox_utils import get_request_ip
 from common.helpers.big.dox_auth_token_serializer import DoxAuthTokenSerializer
 from .serializers import UserDataSerializer
 
@@ -66,7 +67,24 @@ class Signup(APIView):
     def post(self, request):
         serializer = RegisterUserSerializer(data=request.data)
         if serializer.is_valid():
-            return Response({"success": "Ok"})
+            username =  serializer.validated_data["username"]
+            email = serializer.validated_data["email"]
+            password = serializer.validated_data["passwordConfirm"]
+            # Для начала создадим временного пользователя с токеном.
+            temp_user = TempUser.objects.create_temp_user(username, email, password, request)
+            # Если токен создан не был,
+            if temp_user is None:
+                message = "Приносим свои извинения, при регистрации нового пользователя возникли проблемы. " \
+                          "Попробуйте еще раз. Если снова возникнет проблема, то подождите " \
+                          "пока не будет устранена неисправность."
+                return {"error": "RegisterUserError", "message": message}
+            # Далее сделаем запрос на почту на подтверждения нового аккаунта.
+            if not TempUser.objects.request_confirm_account(self.request, temp_user):
+                # Если запрос по какой-то причине не прошел, то удалим временного пользователя,
+                temp_user.delete()
+                return {"error": "MessagingException"}
+            else:
+                return Response({"success": "Ok"})
         else:
             error_data = {"error": "FieldValidateError", "fields_error": serializer.errors}
             return Response(error_data)

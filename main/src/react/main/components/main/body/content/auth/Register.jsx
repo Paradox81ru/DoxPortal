@@ -16,6 +16,8 @@ import {addSystemMessage} from "../../../../../store/actions/generalActions";
 
 import {
     setFieldsError,
+    setNonFieldError,
+    clearAllFieldsValue,
     removeAllFieldsErrors
 }
     from "../../../../../lib/FormUtils";
@@ -65,10 +67,10 @@ class Register extends Component {
             .then(response => {
                 // Если данные формы успешно отправлены,
                 if (response.hasOwnProperty("success")) {
-                    // // то удаляю все ошибки,
-                    // removeAllFieldsErrors(this);
-                    // // очищаю поля
-                    // clearAllFieldsValue(this);
+                    // то удаляю все ошибки,
+                    removeAllFieldsErrors(this);
+                    // очищаю поля
+                    clearAllFieldsValue(this);
                     // и отображаю сообщение об успешной регистрации нового пользователя.
                     this.setRedirect(SUCCESS_REDIRECT)
                     // this.props.handleAddSystemMessage("success", response['message']);
@@ -79,12 +81,16 @@ class Register extends Component {
                         // то отображу ошибки около полей.
                         setFieldsError(response["fields_error"], this);
                     } else if (response["error"] === "MessagingError") {
-                        // А если это ошибка отправки сообщения по почте, то перенаправлю на страницу сообщения.
+                        // Если это ошибка отправки сообщения по почте, то перенаправлю на страницу сообщения.
                         this.setRedirect(INVALID_REDIRECT);
+                    } else if (response["error"] === "RegisterUserError") {
+                        // А если это ошибка регистрации нового пользователя.
+                        setNonFieldError(response["message"], this);
                     }
                 }
             })
             .catch(error => {
+                removeAllFieldsErrors(this);
                 this.props.handleAddSystemMessage("danger", "Неизвестная ошибка: " + error);
             });
     }
