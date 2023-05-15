@@ -9,7 +9,7 @@ def main(request):
     return render(request, 'main/index.html')
 
 
-def main_path(request, path):
+def main_path(request, path, path2=None):
     return render(request, 'main/index.html')
 
 

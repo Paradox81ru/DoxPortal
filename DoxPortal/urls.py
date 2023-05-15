@@ -24,6 +24,7 @@ urlpatterns = [
     path('api/auth/', include('accounts.urls')),
     path('api/', include('common.urls')),
     path('<str:path>', main_path, name='main'),
+    path('<str:path>/<str:path2>', main_path, name='main'),
     path('main/captcha.png', view=captcha_v, name='captcha'),
     re_path(r'main/captcha(?P<rand>[0-9]+).png', view=captcha_v, name='rand-captcha'),
 

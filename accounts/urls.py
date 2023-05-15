@@ -9,7 +9,7 @@ urlpatterns = [
     path('logoutall', knox_views.LogoutAllView.as_view(), name='knox_logoutall'),
 
     path('signup', Signup.as_view()),
-    path('confirm-account/<str:token>', confirm_account, name='confirm-account'),
+    path('confirm-account', ConfirmAccount.as_view(), name='confirm-account'),
     # path('repeated-confirm-account', RepeatedConfirmAccount.as_view(), name='repeated-confirm-account'),
     # path('request-password-reset', RequestPasswordReset.as_view(), name='request-password-reset'),
     # path('confirm-reset-password/<str:token>', confirm_reset_password, name='confirm-reset-password'),

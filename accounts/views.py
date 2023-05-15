@@ -1,5 +1,6 @@
 from django.contrib.auth.signals import user_logged_in
 
+from rest_framework.request import HttpRequest
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -119,16 +120,17 @@ class GetUser(APIView):
         return Response(serializer.data)
 
 
-def confirm_account(request, token):
-    """ Представление подтверждения аккаунта """
-    try:
-        user = TempUser.objects.get(pk=token)
-        user.import_temp_user_to_user()
-        user.delete()
-        return Response({"success": "Ok", "username": user.username})
-    # except TempUser.DoesNotExist:
-    #     error_data = {"error": "MessagingError", "username": user.username}
-    #     return Response(error_data)
-    except Exception:
-        error_data = {"error": "ConfirmError", 'message': 'Ошибка подтверждения аккаунта.'}
-        return Response(error_data)
+class ConfirmAccount(APIView):
+    def post(self, request: HttpRequest):
+        token = request.data.get("token", "0")
+        try:
+            temp_user = TempUser.objects.get(pk=token)
+            temp_user.import_temp_user_to_user()
+            temp_user.delete()
+            return Response({"success": "Ok", "username": temp_user.username})
+        except TempUser.DoesNotExist:
+            error_data = {"error": "MessagingError"}
+            return Response(error_data)
+        except Exception:
+            error_data = {"error": "ConfirmError", 'message': 'Ошибка подтверждения аккаунта.'}
+            return Response(error_data)

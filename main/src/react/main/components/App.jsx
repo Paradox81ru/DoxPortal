@@ -10,6 +10,8 @@ import {setDynamicStyles, clearDynamicStyles} from "../lib/stylesheet_util";
 import {whereRememberToken, REMEMBER_LOCAL, REMEMBER_SESSION} from "../lib/auth_token_util";
 import store from "../store/store";
 
+import SiteMessage from "./main/body/content/main/SiteMessage";
+import ConfirmAccount from "./main/body/content/Auth/ConfirmAccount";
 import Header from "./main/header/Header";
 import UnderHeader from "./main/under_header/UnderHeader";
 import Body from "./main/body/Body";
@@ -82,15 +84,15 @@ export default class App extends Component{
     }
 
     componentDidMount() {
-        // this.setState({
-        //     whereRememberToken: whereRememberToken()
-        // });
+        this.setState({
+            whereRememberToken: whereRememberToken()
+        });
         // Защита от бесконечного цикла.
         let block = false;
         this.sendBeginDataRequest()
            .then(resp => {
                if (!resp && !block) {
-                   // Прежде чем запустить рекурсию, инициализирую блок от бе конечного цикла.
+                   // Прежде чем запустить рекурсию, инициализирую блок от бесконечного цикла.
                    block = true;
                    this.sendBeginDataRequest();
                    this._addSystemMessage("warning", "Токен доступа истёк");
@@ -153,6 +155,8 @@ export default class App extends Component{
                     <Routes>
                         <Route element={<Body />} >
                             <Route path="/" element={<p>Главная</p>} />
+                            <Route path="/site-message/:messageView" element={<SiteMessage />} />
+                            <Route path="/confirm-account/:token" element={<ConfirmAccount />} />
                             <Route path="/login" element={
                                 <Login_W setStyle={this.setListStyles} clearStyle={this.clearListStyles}
                                              onChangeIsRememberMe={this.handleChangeWhereRememberToken}

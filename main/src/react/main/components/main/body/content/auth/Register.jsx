@@ -80,13 +80,15 @@ class Register extends Component {
                     if (response["error"] === "FieldValidateError") {
                         // то отображу ошибки около полей.
                         setFieldsError(response["fields_error"], this);
-                    } else if (response["error"] === "MessagingError") {
-                        // Если это ошибка отправки сообщения по почте, то перенаправлю на страницу сообщения.
+                    } else if (response["error"] === "MessagingError" || response["error"] === "RegisterUserError") {
+                        // Если это ошибка отправки сообщения по почте, или ошибка регистрации нового пользователя,
+                        // то перенаправлю на страницу сообщения.
                         this.setRedirect(INVALID_REDIRECT);
-                    } else if (response["error"] === "RegisterUserError") {
-                        // А если это ошибка регистрации нового пользователя.
-                        setNonFieldError(response["message"], this);
                     }
+                    // else if (response["error"] === "RegisterUserError") {
+                    //     // А если это ошибка регистрации нового пользователя.
+                    //     setNonFieldError(response["message"], this);
+                    // }
                 }
             })
             .catch(error => {
