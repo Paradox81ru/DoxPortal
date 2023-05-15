@@ -9,6 +9,7 @@
     {{ resources.css('other/bootstrap/css/bootstrap') }}
     {{ resources.css('other/font-awesome/css/all') }}
     {{ resources.css('common/css/my_addition') }}
+    {{ resources.css('common/css/site') }}
     {{ resources.css('my_admin/css/admin_site') }}
     </head>
     <body>
@@ -19,6 +20,6 @@
                 <p>© Жорж Парадокс, 2020-{{ today_date|format_date("Y") }}. При копировании материалов активная ссылка на сайт <a href="{{ url('main') }}">{{ request.get_host() }}</a> обязательна.</p>
             </div>
         </footer> <!-- /.footer -->
-     {{ resources.js('main/js/bundle') }}
+     {{ resources.js('my_admin/js/bundle') }}
     </body>
 </html>

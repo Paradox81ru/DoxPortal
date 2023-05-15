@@ -17,12 +17,14 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 
 from main.views import *
+from my_admin.views import main as my_admin_main
 
 urlpatterns = [
     path('', main, name='main'),
-    path('my-admin/', include('my_admin.urls')),
+    path("my-admin/", my_admin_main),
     path('api/auth/', include('accounts.urls')),
     path('api/', include('common.urls')),
+    path('api/my-admin/', include('my_admin.urls')),
     path('<str:path>', main_path, name='main'),
     path('<str:path>/<str:path2>', main_path, name='main'),
     path('main/captcha.png', view=captcha_v, name='captcha'),

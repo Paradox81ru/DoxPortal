@@ -68,7 +68,7 @@ class Signup(APIView):
     def post(self, request):
         serializer = RegisterUserSerializer(data=request.data)
         if serializer.is_valid():
-            username =  serializer.validated_data["username"]
+            username = serializer.validated_data["username"]
             email = serializer.validated_data["email"]
             password = serializer.validated_data["passwordConfirm"]
             # Для начала создадим временного пользователя с токеном.
@@ -88,6 +88,22 @@ class Signup(APIView):
                 return Response({"success": "Ok"})
         else:
             error_data = {"error": "FieldValidateError", "fields_error": serializer.errors}
+            return Response(error_data)
+
+
+class ConfirmAccount(APIView):
+    def post(self, request: HttpRequest):
+        token = request.data.get("token", "0")
+        try:
+            temp_user = TempUser.objects.get(pk=token)
+            temp_user.import_temp_user_to_user()
+            temp_user.delete()
+            return Response({"success": "Ok", "username": temp_user.username})
+        except TempUser.DoesNotExist:
+            error_data = {"error": "MessagingError"}
+            return Response(error_data)
+        except Exception:
+            error_data = {"error": "ConfirmError", 'message': 'Ошибка подтверждения аккаунта.'}
             return Response(error_data)
 
 
@@ -118,19 +134,3 @@ class GetUser(APIView):
         user = User.objects.get(username="User")
         serializer = UserDataSerializer(instance=user)
         return Response(serializer.data)
-
-
-class ConfirmAccount(APIView):
-    def post(self, request: HttpRequest):
-        token = request.data.get("token", "0")
-        try:
-            temp_user = TempUser.objects.get(pk=token)
-            temp_user.import_temp_user_to_user()
-            temp_user.delete()
-            return Response({"success": "Ok", "username": temp_user.username})
-        except TempUser.DoesNotExist:
-            error_data = {"error": "MessagingError"}
-            return Response(error_data)
-        except Exception:
-            error_data = {"error": "ConfirmError", 'message': 'Ошибка подтверждения аккаунта.'}
-            return Response(error_data)

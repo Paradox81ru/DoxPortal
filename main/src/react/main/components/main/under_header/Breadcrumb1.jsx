@@ -1,4 +1,4 @@
-import React, {Component} from "../../../../../../../../ode_modules/react";
+import React, {Component} from "../../../../../../../../node_modules/react";
 import {Link} from "../../../../../../../../node_modules/react-router-dom"
 import {connect} from "../../../../../../../../node_modules/react-redux";
 
