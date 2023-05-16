@@ -8,7 +8,7 @@ export default function UnderHeader(props) {
     return (
         <div className="container under-header">
             <Breadcrumb_W currentURL={location.pathname} isAdmin={props.isAdmin} />
-            <LoginField_W />
+            <LoginField_W isAdmin={props.isAdmin}  />
         </div>
     )
 }

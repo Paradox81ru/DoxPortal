@@ -177,7 +177,7 @@ class Login extends Component {
 
 function mapStateToProps(state) {
     return {
-        dataForm: state.cachePage.loginForm
+        dataForm: state.hasOwnProperty("cachePage") ? state.cachePage.loginForm : state.loginForm
     }
 }
 

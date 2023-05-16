@@ -1,4 +1,4 @@
-import {SET_BREADCRUMB, CHANGE_USER_AUTHENTICATION, ADD_SYSTEM_MESSAGE, REMOVE_SYSTEM_MESSAGE} from "./constans";
+import {SET_BREADCRUMB, CHANGE_USER_AUTHENTICATION, ADD_SYSTEM_MESSAGE, REMOVE_SYSTEM_MESSAGE, SET_LOGIN_FORM} from "./constans";
 
 export default function reducer(state, action) {
     switch (action.type) {
@@ -26,6 +26,11 @@ export default function reducer(state, action) {
             return {
                 ...state,
                 systemMessages: newSystemMessages
+            }
+        case SET_LOGIN_FORM:
+            return {
+                ...state,
+                loginForm: action.form
             }
         default:
             return state

@@ -11,7 +11,7 @@ def custom_exception_handler(exc: ValidationError, context):
     response = exception_handler(exc, context)
 
     # Теперь добавьте код состояния HTTP в ответ.
-    if response is not None:
+    if response is not None and exc.__class__.__name__ != 'AuthenticationFailed':
         response.data['fields_error'] = exc.detail.copy()
         response.data['status_cose'] = response.status_code
         if context.get('request').path == '/api/auth/login':

@@ -2,6 +2,7 @@ import React, {Component} from "../../../../../../../../node_modules/react";
 import {bindActionCreators} from "../../../../../../../../node_modules/redux"
 import {connect} from "../../../../../../../../node_modules/react-redux";
 import {Link, Navigate} from "../../../../../../../../node_modules/react-router-dom";
+import Anchor from '../../../../../../../../node_modules/react-bootstrap/Anchor';
 import {removeToken} from "../../../lib/auth_token_util";
 import {changeMainMenu, changeUserAuthentication} from "../../../store/actions/generalActions";
 import {getFetchHeaders} from "../../../lib/doxHelper";
@@ -14,7 +15,7 @@ class LoginField extends Component {
         return (
             <React.Fragment>
                 <Link to="/login">Войти</Link> /&nbsp;
-                <Link to="/signup">Зарегистрироваться</Link>
+                {this.props.isAdmin ? <Anchor href="/signup">Зарегистрироваться</Anchor> : <Link to="/signup">Зарегистрироваться</Link>};
             </React.Fragment>
         )
     }

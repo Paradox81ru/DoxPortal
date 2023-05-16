@@ -36,7 +36,7 @@ class Logout extends Component {
     /** После разлогирования надо вернуть меню по умолчанию и убрать пользователя */
     getBeginData() {
         let options = {headers: getFetchHeaders()};
-        fetch("/api/begin-data/0", options)
+        fetch("/api/begin-data", options)
             .then(response => response.json())
             .then(data => {
                 this.props.handleChangeUserAuthentication(data);

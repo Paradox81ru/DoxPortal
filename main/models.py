@@ -139,6 +139,15 @@ def get_breadcrumb_list():
     return breadcrumb_list
 
 
+def get_admin_breadcrumb_list():
+    """ Возвращает список хлебных крошек для Админки """
+    breadcrumb_list = {"/dox-admin": (("Главная",),)}
+    main = ("Главная", "/dox-admin")
+    breadcrumb_list["/dox-admin/edit-profile"] = (main, ("Редактирование профилей",))
+    breadcrumb_list["/dox-admin/manage-temp-user"] = (main, ("Редактирование временных пользователей",))
+    return breadcrumb_list
+
+
 @dataclass
 class MainMenu:
     label: str

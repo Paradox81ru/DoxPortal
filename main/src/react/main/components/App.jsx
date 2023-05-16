@@ -158,7 +158,7 @@ export default class App extends Component{
                             <Route path="/site-message/:messageView" element={<SiteMessage />} />
                             <Route path="/confirm-account/:token" element={<ConfirmAccount />} />
                             <Route path="/login" element={
-                                <Login_W setStyle={this.setListStyles} clearStyle={this.clearListStyles}
+                                <Login_W  isAdmin={false} setStyle={this.setListStyles} clearStyle={this.clearListStyles}
                                              onChangeIsRememberMe={this.handleChangeWhereRememberToken}
                                          isShowCaptcha={this.state.isShowCaptcha} setShowCaptcha={this.setShowCaptcha}
                                              isRememberMy={this.getRememberMy()} />} />

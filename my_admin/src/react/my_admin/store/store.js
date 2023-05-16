@@ -1,4 +1,4 @@
-import {createStore} from '../../../../../../../../node_modules/redux';
+import {createStore} from '../../../../../../node_modules/redux';
 import reducer from "./reducer";
 
 const initialStore = {
@@ -8,17 +8,18 @@ const initialStore = {
         firstName: null,
         lastName: null
     },
+    loginForm: [],
     breadcrumbList: {
-        "/my-admin": [
+        "/dox-admin": [
             {
                 "title": "Главная",
                 "path": null
             }
         ],
-        "/my-admin/edit-profile": [
+        "/dox-admin/edit-profile": [
             {
                 "title": "Главная",
-                "path": "/my-admin"
+                "path": "/dox-admin"
             },
             {
                 "title": "Редактирование профилей",

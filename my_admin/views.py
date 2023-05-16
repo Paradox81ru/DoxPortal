@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
-from main.models import get_breadcrumb_list
+from main.models import get_admin_breadcrumb_list
 from my_admin.serializers import BeginDataSerializer
 
 
@@ -17,7 +17,7 @@ def begin_data(request):
     if user.is_anonymous:
         user.email = ""
     begin_data_serializer = BeginDataSerializer({
-        'breadcrumbList': get_breadcrumb_list(),
+        'breadcrumbList': get_admin_breadcrumb_list(),
         'userAuthentication': user,
     })
     return Response(begin_data_serializer.data)
