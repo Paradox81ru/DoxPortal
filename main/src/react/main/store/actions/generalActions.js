@@ -1,4 +1,4 @@
-import {CHANGE_USER_AUTHENTICATION, RESET_USER_AUTHENTICATION, CHANGE_MAIN_MENU, RESET_MAIN_MENU,
+import {CHANGE_USER_AUTHENTICATION, CHANGE_USER_GROUPS, RESET_USER_AUTHENTICATION, CHANGE_MAIN_MENU, RESET_MAIN_MENU,
     ADD_SYSTEM_MESSAGE, REMOVE_SYSTEM_MESSAGE} from "../constants/generalConstants";
 
 /** Изменяет данные авторизованного пользователя */
@@ -6,6 +6,14 @@ function changeUserAuthentication(data) {
     return {
         type: CHANGE_USER_AUTHENTICATION,
         userAuthentication: data.userAuthentication
+    }
+}
+
+/** Изменяет группу, в которую входит пользователь */
+function changeUserGroups(data) {
+    return {
+        type: CHANGE_USER_GROUPS,
+        userGroups: data.userGroups
     }
 }
 
@@ -103,5 +111,5 @@ function removeSystemMessage(id) {
     }
 }
 
-export {changeUserAuthentication, resetUserAuthentication, changeMainMenu, resetMainMenu,
+export {changeUserAuthentication, changeUserGroups, resetUserAuthentication, changeMainMenu, resetMainMenu,
     addSystemMessage, removeSystemMessage};

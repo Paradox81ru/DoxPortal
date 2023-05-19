@@ -47,12 +47,12 @@ class ParadoxManager(models.Manager):
             # Если выбрано парадоксов не было, то проверим,
             if len(paradoxes_id) == 0:
                 # а есть ли вообще парадоксы в базе данных?
-                if self.objects.count() == 0:
+                if self.model.objects.all().count() == 0:
                     # Если нет, то парадокс будет пустым.
                     return {'header': '', 'content': ''}
                 else:
                     # Иначе изменим у всех парадоксов флаг выбираемости на True,
-                    self.objects.set_all_can_choices_paradox()
+                    self.set_all_can_choices_paradox()
                     # и снова выберим все доступные парадоксы.
                     paradoxes_id = list(self.get_can_choices_paradox_id())
             # Среди списка идентификаторов доступных парадоксов выберим один случайный,

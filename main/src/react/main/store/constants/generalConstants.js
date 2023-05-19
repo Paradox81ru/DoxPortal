@@ -1,5 +1,7 @@
 /** Изменяет данные авторизованного пользователя */
 const CHANGE_USER_AUTHENTICATION = "CHANGE_USER_AUTHENTICATION";
+/** Изменяет группу, в которую входит пользователь */
+const CHANGE_USER_GROUPS = "CHANGE_USER_GROUPS";
 /** Сбрасывает данные авторизованного пользователя */
 const RESET_USER_AUTHENTICATION = "RESET_USER_AUTHENTICATION";
 /** Изменяет главное меню расположенное в левом сайдбаре */
@@ -12,5 +14,5 @@ const ADD_SYSTEM_MESSAGE = "ADD_MESSAGE";
 const REMOVE_SYSTEM_MESSAGE = "REMOVE_MESSAGE";
 
 
-export {CHANGE_USER_AUTHENTICATION, RESET_USER_AUTHENTICATION, CHANGE_MAIN_MENU, RESET_MAIN_MENU,
+export {CHANGE_USER_AUTHENTICATION, CHANGE_USER_GROUPS, RESET_USER_AUTHENTICATION, CHANGE_MAIN_MENU, RESET_MAIN_MENU,
     ADD_SYSTEM_MESSAGE, REMOVE_SYSTEM_MESSAGE};

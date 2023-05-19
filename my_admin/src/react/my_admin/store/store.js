@@ -8,6 +8,7 @@ const initialStore = {
         firstName: null,
         lastName: null
     },
+    userGroups: [],
     loginForm: [],
     breadcrumbList: {
         "/dox-admin": [

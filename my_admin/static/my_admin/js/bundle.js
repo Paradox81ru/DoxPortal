@@ -10917,6 +10917,7 @@ var Login = /*#__PURE__*/function (_Component) {
     _defineProperty(_assertThisInitialized(_this), "setDataLogin", function (data) {
       _this.props.handleChangeMainMenu(data);
       _this.props.handleChangeUserAuthentication(data);
+      _this.props.handleChangeUserGroups(data);
       _this.props.onChangeIsRememberMe(_this.state.fields.rememberMe);
       (0,_lib_auth_token_util__WEBPACK_IMPORTED_MODULE_5__.saveToken)((0,_lib_auth_token_util__WEBPACK_IMPORTED_MODULE_5__.isRememberMiToWhereRememberToken)(_this.state.fields.rememberMe), data.token);
     });
@@ -11068,7 +11069,8 @@ function mapDispatchToProps(dispatch) {
   return {
     handleSetLoginFormCache: (0,_node_modules_redux__WEBPACK_IMPORTED_MODULE_15__.bindActionCreators)(_store_actions_cachePagesActions__WEBPACK_IMPORTED_MODULE_2__.setLoginForm, dispatch),
     handleChangeMainMenu: (0,_node_modules_redux__WEBPACK_IMPORTED_MODULE_15__.bindActionCreators)(_store_actions_generalActions__WEBPACK_IMPORTED_MODULE_3__.changeMainMenu, dispatch),
-    handleChangeUserAuthentication: (0,_node_modules_redux__WEBPACK_IMPORTED_MODULE_15__.bindActionCreators)(_store_actions_generalActions__WEBPACK_IMPORTED_MODULE_3__.changeUserAuthentication, dispatch)
+    handleChangeUserAuthentication: (0,_node_modules_redux__WEBPACK_IMPORTED_MODULE_15__.bindActionCreators)(_store_actions_generalActions__WEBPACK_IMPORTED_MODULE_3__.changeUserAuthentication, dispatch),
+    handleChangeUserGroups: (0,_node_modules_redux__WEBPACK_IMPORTED_MODULE_15__.bindActionCreators)(_store_actions_generalActions__WEBPACK_IMPORTED_MODULE_3__.changeUserGroups, dispatch)
   };
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,_node_modules_react_redux__WEBPACK_IMPORTED_MODULE_1__.connect)(mapStateToProps, mapDispatchToProps)(Login));
@@ -12469,6 +12471,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "addSystemMessage": () => (/* binding */ addSystemMessage),
 /* harmony export */   "changeMainMenu": () => (/* binding */ changeMainMenu),
 /* harmony export */   "changeUserAuthentication": () => (/* binding */ changeUserAuthentication),
+/* harmony export */   "changeUserGroups": () => (/* binding */ changeUserGroups),
 /* harmony export */   "removeSystemMessage": () => (/* binding */ removeSystemMessage),
 /* harmony export */   "resetMainMenu": () => (/* binding */ resetMainMenu),
 /* harmony export */   "resetUserAuthentication": () => (/* binding */ resetUserAuthentication)
@@ -12481,6 +12484,14 @@ function changeUserAuthentication(data) {
   return {
     type: _constants_generalConstants__WEBPACK_IMPORTED_MODULE_0__.CHANGE_USER_AUTHENTICATION,
     userAuthentication: data.userAuthentication
+  };
+}
+
+/** Изменяет группу, в которую входит пользователь */
+function changeUserGroups(data) {
+  return {
+    type: _constants_generalConstants__WEBPACK_IMPORTED_MODULE_0__.CHANGE_USER_GROUPS,
+    userGroups: data.userGroups
   };
 }
 
@@ -12614,12 +12625,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "ADD_SYSTEM_MESSAGE": () => (/* binding */ ADD_SYSTEM_MESSAGE),
 /* harmony export */   "CHANGE_MAIN_MENU": () => (/* binding */ CHANGE_MAIN_MENU),
 /* harmony export */   "CHANGE_USER_AUTHENTICATION": () => (/* binding */ CHANGE_USER_AUTHENTICATION),
+/* harmony export */   "CHANGE_USER_GROUPS": () => (/* binding */ CHANGE_USER_GROUPS),
 /* harmony export */   "REMOVE_SYSTEM_MESSAGE": () => (/* binding */ REMOVE_SYSTEM_MESSAGE),
 /* harmony export */   "RESET_MAIN_MENU": () => (/* binding */ RESET_MAIN_MENU),
 /* harmony export */   "RESET_USER_AUTHENTICATION": () => (/* binding */ RESET_USER_AUTHENTICATION)
 /* harmony export */ });
 /** Изменяет данные авторизованного пользователя */
 var CHANGE_USER_AUTHENTICATION = "CHANGE_USER_AUTHENTICATION";
+/** Изменяет группу, в которую входит пользователь */
+var CHANGE_USER_GROUPS = "CHANGE_USER_GROUPS";
 /** Сбрасывает данные авторизованного пользователя */
 var RESET_USER_AUTHENTICATION = "RESET_USER_AUTHENTICATION";
 /** Изменяет главное меню расположенное в левом сайдбаре */
@@ -12723,6 +12737,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ generalReducer)
 /* harmony export */ });
 /* harmony import */ var _constants_generalConstants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../constants/generalConstants */ "./DoxPortal/main/src/react/main/store/constants/generalConstants.js");
+/* harmony import */ var _my_admin_src_react_my_admin_store_constans__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../../my_admin/src/react/my_admin/store/constans */ "./DoxPortal/my_admin/src/react/my_admin/store/constans.js");
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
 function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
@@ -12732,6 +12747,7 @@ function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key i
 function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
 function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 
+
 var initialStore = {
   userAuthentication: {
     username: null,
@@ -12739,6 +12755,7 @@ var initialStore = {
     firstName: null,
     lastName: null
   },
+  userGroups: [],
   mainMenu: [{
     "label": "Статьи",
     "style": "default",
@@ -12786,6 +12803,10 @@ function generalReducer() {
     case _constants_generalConstants__WEBPACK_IMPORTED_MODULE_0__.CHANGE_USER_AUTHENTICATION:
       return _objectSpread(_objectSpread({}, state), {}, {
         userAuthentication: action.userAuthentication
+      });
+    case _my_admin_src_react_my_admin_store_constans__WEBPACK_IMPORTED_MODULE_1__.CHANGE_USER_GROUPS:
+      return _objectSpread(_objectSpread({}, state), {}, {
+        userGroups: action.userGroups
       });
     case _constants_generalConstants__WEBPACK_IMPORTED_MODULE_0__.CHANGE_MAIN_MENU:
       return _objectSpread(_objectSpread({}, state), {}, {
@@ -13315,6 +13336,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "ADD_SYSTEM_MESSAGE": () => (/* binding */ ADD_SYSTEM_MESSAGE),
 /* harmony export */   "CHANGE_USER_AUTHENTICATION": () => (/* binding */ CHANGE_USER_AUTHENTICATION),
+/* harmony export */   "CHANGE_USER_GROUPS": () => (/* binding */ CHANGE_USER_GROUPS),
 /* harmony export */   "REMOVE_SYSTEM_MESSAGE": () => (/* binding */ REMOVE_SYSTEM_MESSAGE),
 /* harmony export */   "SET_BREADCRUMB": () => (/* binding */ SET_BREADCRUMB),
 /* harmony export */   "SET_LOGIN_FORM": () => (/* binding */ SET_LOGIN_FORM)
@@ -13323,6 +13345,8 @@ __webpack_require__.r(__webpack_exports__);
 var SET_BREADCRUMB = "SET_BREADCRUMB";
 /** Изменяет данные авторизованного пользователя */
 var CHANGE_USER_AUTHENTICATION = "CHANGE_USER_AUTHENTICATION";
+/** Изменяет группу, в которую входит пользователь */
+var CHANGE_USER_GROUPS = "CHANGE_USER_GROUPS";
 /** Добавляет системное сообщение */
 var ADD_SYSTEM_MESSAGE = "ADD_MESSAGE";
 /** Удаляет системное сообщение */
@@ -13363,6 +13387,10 @@ function reducer(state, action) {
     case _constans__WEBPACK_IMPORTED_MODULE_0__.CHANGE_USER_AUTHENTICATION:
       return _objectSpread(_objectSpread({}, state), {}, {
         userAuthentication: action.userAuthentication
+      });
+    case _constans__WEBPACK_IMPORTED_MODULE_0__.CHANGE_USER_GROUPS:
+      return _objectSpread(_objectSpread({}, state), {}, {
+        userGroups: action.userGroups
       });
     case _constans__WEBPACK_IMPORTED_MODULE_0__.ADD_SYSTEM_MESSAGE:
       return _objectSpread(_objectSpread({}, state), {}, {
@@ -13410,6 +13438,7 @@ var initialStore = {
     firstName: null,
     lastName: null
   },
+  userGroups: [],
   loginForm: [],
   breadcrumbList: {
     "/dox-admin": [{

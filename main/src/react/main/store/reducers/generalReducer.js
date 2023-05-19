@@ -1,4 +1,5 @@
 import {CHANGE_USER_AUTHENTICATION, CHANGE_MAIN_MENU, ADD_SYSTEM_MESSAGE, REMOVE_SYSTEM_MESSAGE} from "../constants/generalConstants";
+import {CHANGE_USER_GROUPS} from "../../../../../../my_admin/src/react/my_admin/store/constans";
 
 const initialStore = {
     userAuthentication: {
@@ -7,6 +8,7 @@ const initialStore = {
         firstName: null,
         lastName: null
     },
+    userGroups: [],
     mainMenu:  [
             {
                 "label": "Статьи",
@@ -63,6 +65,11 @@ export default function generalReducer(state = initialStore, action) {
                 ...state,
                 userAuthentication: action.userAuthentication
             };
+        case CHANGE_USER_GROUPS:
+            return {
+                ...state,
+                userGroups: action.userGroups
+            }
         case CHANGE_MAIN_MENU:
             return {
                 ...state,

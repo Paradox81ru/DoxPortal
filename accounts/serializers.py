@@ -19,6 +19,7 @@ class UserDataSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     """ Сериализатор данных при логировании """
     userAuthentication = UserDataSerializer()
+    userGroups = serializers.ListField()
     token = serializers.CharField()
     mainMenu = MainMenuSerializer(many=True)
 

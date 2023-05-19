@@ -54,9 +54,11 @@ class LoginView(KnoxLoginView):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         login(request, user)
+        user_groups = user.groups.all().values()
         token = self._get_token(request, format)
         login_serializer = LoginSerializer({
             'userAuthentication': user,
+            'userGroups': user_groups,
             'token': token,
             'mainMenu': get_main_menu_list(user),
         })

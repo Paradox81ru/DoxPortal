@@ -6,7 +6,7 @@ import Row from '../../../../../../../../../../node_modules/react-bootstrap/Row'
 import Col from '../../../../../../../../../../node_modules/react-bootstrap/Col';
 
 import {setLoginForm} from "../../../../../store/actions/cachePagesActions";
-import {changeMainMenu, changeUserAuthentication} from "../../../../../store/actions/generalActions";
+import {changeMainMenu, changeUserAuthentication, changeUserGroups} from "../../../../../store/actions/generalActions";
 import {getFetchHeaders} from "../../../../../lib/send_request_util";
 import {saveToken, isRememberMiToWhereRememberToken} from "../../../../../lib/auth_token_util";
 import {
@@ -102,6 +102,7 @@ class Login extends Component {
     setDataLogin = (data) => {
         this.props.handleChangeMainMenu(data);
         this.props.handleChangeUserAuthentication(data);
+        this.props.handleChangeUserGroups(data);
         this.props.onChangeIsRememberMe(this.state.fields.rememberMe);
         saveToken(isRememberMiToWhereRememberToken(this.state.fields.rememberMe), data.token);
     }
@@ -185,7 +186,8 @@ function mapDispatchToProps(dispatch) {
     return {
         handleSetLoginFormCache: bindActionCreators(setLoginForm, dispatch),
         handleChangeMainMenu: bindActionCreators(changeMainMenu, dispatch),
-        handleChangeUserAuthentication: bindActionCreators(changeUserAuthentication, dispatch)
+        handleChangeUserAuthentication: bindActionCreators(changeUserAuthentication, dispatch),
+        handleChangeUserGroups: bindActionCreators(changeUserGroups, dispatch)
     }
 }
 
