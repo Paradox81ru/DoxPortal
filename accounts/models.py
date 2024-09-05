@@ -196,7 +196,7 @@ class User(AbstractUser):
     }
 
     @classproperty
-    def field_meta_data(cls):
+    def field_meta_data(self):
         return [
             FormFieldMetaData("username", "id_username", "Логин", dox_enumes.TYPE_TEXT, True,
                               {"maxLength": "100", "minLength": "3"},

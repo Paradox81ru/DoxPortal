@@ -24,14 +24,14 @@ class Command(BaseCommand):
         count_temp_users = options.get("count_temp_users", None)
         count_personal_message = options.get("count_personal_message", None)
 
-        if count_articles is not None and count_articles > 0:
-            self._add_random_articles(count_articles)
+        # if count_articles is not None and count_articles > 0:
+        #     self._add_random_articles(count_articles)
         if count_users is not None and count_users > 0:
             self._add_random_users(count_users)
-        if count_temp_users is not None and count_temp_users > 0:
-            self._add_random_temp_users(count_temp_users)
-        if count_personal_message is not None and count_personal_message > 0:
-            self._add_random_personal_messages(count_personal_message)
+        # if count_temp_users is not None and count_temp_users > 0:
+        #     self._add_random_temp_users(count_temp_users)
+        # if count_personal_message is not None and count_personal_message > 0:
+        #     self._add_random_personal_messages(count_personal_message)
 
     # def _add_random_articles(self, count):
     #     # Для начала получим идентификаторы всех пользователей.
