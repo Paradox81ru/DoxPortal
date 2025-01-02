@@ -9,16 +9,16 @@ from accounts.models import User, UserRoles
 
 
 def init_default_users(apps, schema_editor):
-    user_admin = User.objects.create_superuser('Admin', 'paradox81ru@yandex.ru', 'zemlYA_987')
+    user_admin = User.objects.create_superuser('Admin', 'paradox81ru@yandex.ru', 'Pups_555')
     user_admin.save()
 
-    user_system = User.objects.create_user('System', 'paradox81ru@gmail.com', 'zemlYA_987',
+    user_system = User.objects.create_user('System', 'paradox81ru@gmail.com', 'Pups_555',
                                            role=UserRoles.system.name,
                                            first_name="Система",
                                            ip_address='127.0.0.1')
     user_system.save()
 
-    user_paradox = User.objects.create_user('Paradox', 'paradox81ru@mail.ru', 'zemlYA_987',
+    user_paradox = User.objects.create_user('Paradox', 'paradox81ru@mail.ru', 'Pups_555',
                                             role=UserRoles.director.name,
                                             first_name="Жорж",
                                             last_name="Парадокс",
@@ -27,7 +27,7 @@ def init_default_users(apps, schema_editor):
                                             ip_address='195.177.105.122')
     user_paradox.save()
 
-    user_user = User.objects.create_user('User', 'paradox81ru@hotmail.com', 'zemlYA_987',
+    user_user = User.objects.create_user('User', 'paradox81ru@hotmail.com', 'Pups_555',
                                          first_name="Пользователь",
                                          ip_address='127.0.0.1')
     user_user.save()
